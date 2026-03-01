@@ -1,0 +1,660 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
+<title>Sistema Institucional de Reporte de Infraestructura</title>
+
+<style>
+  :root{
+    --bg1:#070b14; --bg2:#0b1220;
+    --line: rgba(255,255,255,.12);
+    --text:#eef3ff; --muted:#a8b6da;
+    --shadow: 0 18px 60px rgba(0,0,0,.38);
+    --vh: 1vh;
+  }
+  *{box-sizing:border-box}
+  html, body{height:100%}
+
+  body{
+    margin:0;
+    font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial;
+    background:
+      radial-gradient(1200px 620px at 18% 0%, rgba(110,168,254,.20), transparent 60%),
+      radial-gradient(860px 460px at 92% 10%, rgba(71,209,140,.14), transparent 62%),
+      linear-gradient(180deg,var(--bg1),var(--bg2));
+    color:var(--text);
+    min-height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:16px;
+    -webkit-text-size-adjust:100%;
+  }
+
+  .app{
+    width:min(980px, 100%);
+    height:min(86vh, 820px);
+    display:flex;
+    flex-direction:column;
+    border:1px solid var(--line);
+    background: rgba(16,26,46,.52);
+    border-radius:18px;
+    overflow:hidden;
+    box-shadow: var(--shadow);
+    backdrop-filter: blur(10px);
+  }
+
+  .top{
+    padding:14px 16px;
+    border-bottom:1px solid var(--line);
+    display:flex;
+    gap:12px;
+    align-items:center;
+    justify-content:space-between;
+    background: rgba(16,26,46,.78);
+    flex:0 0 auto;
+  }
+
+  .brand b{
+    display:block;
+    font-size:14px;
+    letter-spacing:.2px;
+    font-weight:800;
+  }
+  .brand span{
+    display:block;
+    font-size:12px;
+    color:var(--muted);
+    margin-top:2px;
+  }
+
+  .pill{
+    font-size:12px;
+    color:var(--muted);
+    border:1px solid var(--line);
+    padding:6px 10px;
+    border-radius:999px;
+    max-width:60vw;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+  }
+
+  .chat{
+    flex: 1 1 auto;
+    overflow:auto;
+    padding:16px;
+    scroll-behavior:smooth;
+  }
+
+  .row{display:flex; gap:10px; margin:10px 0; align-items:flex-end}
+  .row.me{justify-content:flex-end}
+
+  .bubble{
+    max-width:min(720px, 88%);
+    border:1px solid var(--line);
+    background: rgba(255,255,255,.06);
+    padding:12px 12px;
+    border-radius:16px;
+    line-height:1.42;
+    font-size:14px;
+    white-space:pre-wrap;
+    word-break:break-word;
+  }
+  .bot .bubble{border-top-left-radius:8px}
+  .me  .bubble{
+    background: rgba(110,168,254,.16);
+    border-color: rgba(110,168,254,.34);
+    border-top-right-radius:8px;
+  }
+
+  .typing{display:inline-flex; gap:4px; align-items:center}
+  .dot{width:6px; height:6px; border-radius:50%; background:rgba(238,243,255,.58); animation: blink 1.2s infinite}
+  .dot:nth-child(2){animation-delay:.15s}
+  .dot:nth-child(3){animation-delay:.3s}
+  @keyframes blink{0%,100%{opacity:.25} 50%{opacity:1}}
+
+  .controls{
+    flex:0 0 auto;
+    border-top:1px solid var(--line);
+    padding:12px 12px;
+    display:flex;
+    gap:10px;
+    background: rgba(16,26,46,.78);
+    align-items:flex-end;
+    position: sticky;
+    bottom: 0;
+    padding-bottom: calc(12px + env(safe-area-inset-bottom));
+  }
+
+  .box{
+    flex:1;
+    border:1px solid var(--line);
+    background: rgba(255,255,255,.06);
+    border-radius:14px;
+    padding:10px;
+  }
+
+  .btns{display:flex; gap:10px; flex-wrap:wrap}
+  button{
+    border:1px solid var(--line);
+    background: rgba(255,255,255,.06);
+    color:var(--text);
+    padding:11px 14px;
+    border-radius:12px;
+    cursor:pointer;
+    font:inherit;
+    font-size:14px;
+    line-height:1.1;
+    touch-action: manipulation;
+  }
+  button.primary{
+    background: rgba(110,168,254,.18);
+    border-color: rgba(110,168,254,.35);
+  }
+  button.primary:hover{ background: rgba(110,168,254,.24); }
+  button:hover{ background: rgba(255,255,255,.09); }
+  button:disabled{ opacity:.55; cursor:not-allowed; }
+
+  input, textarea{
+    width:100%;
+    border:1px solid var(--line);
+    background: rgba(255,255,255,.06);
+    color:var(--text);
+    border-radius:12px;
+    padding:12px 12px;
+    outline:none;
+    font:inherit;
+    font-size:14px;
+  }
+  input::placeholder, textarea::placeholder{ color: rgba(238,243,255,.55); }
+  textarea{min-height:92px; resize:vertical}
+
+  .hint{font-size:12px; color:var(--muted); margin-top:8px; line-height:1.35}
+  .fileRow{display:flex; gap:10px; align-items:center; flex-wrap:wrap}
+  .badge{
+    display:inline-flex; align-items:center; gap:8px;
+    padding:6px 10px;
+    border-radius:999px;
+    border:1px solid var(--line);
+    color:var(--muted);
+    font-size:12px;
+    margin-top:10px;
+  }
+  a{color:var(--text); text-decoration:underline; text-underline-offset:2px}
+
+  @media (max-width: 560px){
+    body{
+      padding:0;
+      align-items:stretch;
+      justify-content:stretch;
+      min-height: calc(var(--vh) * 100);
+      height: calc(var(--vh) * 100);
+    }
+    .app{
+      width:100vw;
+      height: calc(var(--vh) * 100);
+      border-radius:0;
+      border:none;
+      box-shadow:none;
+    }
+    .top{ padding:12px 12px; }
+    .chat{ padding:12px; }
+    .bubble{
+      font-size:15px;
+      max-width: 92%;
+      padding:12px 12px;
+    }
+    input, textarea{ font-size:16px; }
+    button{ font-size:15px; padding:12px 14px; }
+    .btns{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:10px;
+    }
+    .btns button{ width:100%; }
+    .controls{
+      padding:10px 10px;
+      padding-bottom: calc(10px + env(safe-area-inset-bottom));
+    }
+  }
+</style>
+</head>
+
+<body>
+  <div class="app">
+    <div class="top">
+      <div class="brand">
+        <b>Sistema Institucional de Reporte de Infraestructura</b>
+        <span>Subsecretaría de Infraestructura Informática y Servicios Comunes</span>
+      </div>
+      <div class="pill" id="pill">Inicio</div>
+    </div>
+
+    <div class="chat" id="chat"></div>
+
+    <div class="controls">
+      <div class="box" id="box"></div>
+    </div>
+  </div>
+
+<script>
+  // 1) Pegá tu URL /exec de Apps Script acá:
+  const APPS_SCRIPT_EXEC_URL = "/.netlify/functions/proxy";
+
+  const chat = document.getElementById('chat');
+  const box = document.getElementById('box');
+  const pill = document.getElementById('pill');
+
+  function setVhVar(){
+    try{
+      const vv = window.visualViewport;
+      const h = vv ? vv.height : window.innerHeight;
+      document.documentElement.style.setProperty('--vh', (h * 0.01) + 'px');
+    }catch(e){}
+  }
+  setVhVar();
+  window.addEventListener('resize', setVhVar);
+  window.addEventListener('orientationchange', setVhVar);
+  if (window.visualViewport){
+    window.visualViewport.addEventListener('resize', setVhVar);
+    window.visualViewport.addEventListener('scroll', setVhVar);
+  }
+
+  async function callApi(action, payload){
+    const res = await fetch(APPS_SCRIPT_EXEC_URL, {
+      method: "POST",
+      headers: {"Content-Type":"application/json"},
+      body: JSON.stringify({ action, payload })
+    });
+    return await res.json();
+  }
+
+  const state = {
+    area: "",
+    prioridad: "",
+    ubicacion: "",
+    detalle: "",
+    fecha_incidente: "",
+    nombre: "",
+    email: "",
+    quiereImagen: null,
+    imagenUrl: ""
+  };
+
+  const FLOW = [
+    { k: "area", type: "buttons", text: "¡Hola! Bienvenido al sistema de reportes internos de infraestructura.\n\n¿A qué área corresponde el incidente?", options: ["Limpieza","Vigilancia","Mantenimiento","Informática"] },
+    { k: "prioridad", type: "buttons", text: "¿Cuál es la prioridad del incidente?", options: ["Baja","Media","Alta","Crítica"] },
+    { k: "ubicacion", type: "input", text: "¿Dónde ocurrió el incidente?\nEjemplo: Aula 16 – Campus Universitario", placeholder: "Ubicación (sector, referencia o aula)" },
+    { k: "fecha_incidente", type: "date", text: "Fecha del incidente" },
+    { k: "detalle", type: "textarea", text: "Describe en detalle el incidente ocurrido. ¿Qué sucede?", placeholder: "Descripción (qué ocurre, desde cuándo y cualquier dato útil para su verificación)" },
+    { k: "nombre", type: "input", text: "Tu nombre y apellido", placeholder: "Nombre y apellido" },
+    { k: "email", type: "input", text: "Finalmente, proporciónanos tu correo electrónico para notificarte el seguimiento y estado de tu ticket.", placeholder: "correo@ejemplo.com" },
+    { k: "quiereImagen", type: "buttons", text: "📎 ¿Desea adjuntar imágenes? (Opcional)", options: ["Sí","No"] },
+    { k: "imagen", type: "file", text: "Adjunte la imagen (JPG/PNG).", optional: true },
+    { k: "confirm", type: "confirm", text: "Verificación final: revise la información y confirme el registro." }
+  ];
+
+  function addMsg(who, text){
+    const row = document.createElement('div');
+    row.className = 'row ' + (who === 'me' ? 'me' : 'bot');
+
+    const bubble = document.createElement('div');
+    bubble.className = 'bubble';
+    bubble.textContent = text;
+
+    row.appendChild(bubble);
+    chat.appendChild(row);
+    chat.scrollTop = chat.scrollHeight;
+  }
+
+  function showTyping(){
+    const row = document.createElement('div');
+    row.className = 'row bot';
+    row.id = 'typingRow';
+
+    const bubble = document.createElement('div');
+    bubble.className = 'bubble';
+
+    const t = document.createElement('span');
+    t.className = 'typing';
+    t.innerHTML = '<span class="dot"></span><span class="dot"></span><span class="dot"></span>';
+
+    bubble.appendChild(t);
+    row.appendChild(bubble);
+    chat.appendChild(row);
+    chat.scrollTop = chat.scrollHeight;
+  }
+
+  function hideTyping(){
+    const r = document.getElementById('typingRow');
+    if(r) r.remove();
+  }
+
+  function botSay(text, cb){
+    showTyping();
+    setTimeout(() => {
+      hideTyping();
+      addMsg('bot', text);
+      if (typeof cb === "function") cb();
+    }, 420);
+  }
+
+  function btns(options, onClick){
+    box.innerHTML = '';
+    const wrap = document.createElement('div');
+    wrap.className = 'btns';
+    options.forEach(o => {
+      const b = document.createElement('button');
+      b.textContent = o;
+      b.className = 'primary';
+      b.onclick = () => onClick(o);
+      wrap.appendChild(b);
+    });
+    box.appendChild(wrap);
+  }
+
+  function input(placeholder, onSend, type='text'){
+    box.innerHTML = '';
+    const inp = document.createElement('input');
+    inp.placeholder = placeholder || '';
+    inp.type = type;
+    inp.autocomplete = 'off';
+
+    const send = document.createElement('button');
+    send.textContent = 'Continuar';
+    send.className = 'primary';
+
+    send.onclick = () => {
+      const v = (inp.value || '').trim();
+      if(!v) return;
+      onSend(v);
+    };
+
+    inp.addEventListener('keydown', (e) => {
+      if(e.key === 'Enter'){
+        e.preventDefault();
+        send.click();
+      }
+    });
+
+    box.appendChild(inp);
+    box.appendChild(send);
+    inp.focus();
+  }
+
+  function textarea(placeholder, onSend){
+    box.innerHTML = '';
+    const ta = document.createElement('textarea');
+    ta.placeholder = placeholder || '';
+
+    const send = document.createElement('button');
+    send.textContent = 'Continuar';
+    send.className = 'primary';
+
+    send.onclick = () => {
+      const v = (ta.value || '').trim();
+      if(!v) return;
+      onSend(v);
+    };
+
+    ta.addEventListener('keydown', (e) => {
+      if(e.key === 'Enter' && !e.shiftKey){
+        e.preventDefault();
+        send.click();
+      }
+    });
+
+    box.appendChild(ta);
+    box.appendChild(send);
+    ta.focus();
+  }
+
+  function datepicker(onSend){
+    box.innerHTML = '';
+    const inp = document.createElement('input');
+    inp.type = 'date';
+
+    const send = document.createElement('button');
+    send.textContent = 'Continuar';
+    send.className = 'primary';
+
+    send.onclick = () => {
+      const v = (inp.value || '').trim();
+      if(!v) return;
+      onSend(v);
+    };
+
+    box.appendChild(inp);
+    box.appendChild(send);
+    inp.focus();
+  }
+
+  function toBase64(file){
+    return new Promise((resolve, reject) => {
+      const r = new FileReader();
+      r.onload = () => {
+        const s = String(r.result || '');
+        const idx = s.indexOf('base64,');
+        resolve(idx >= 0 ? s.slice(idx + 7) : s);
+      };
+      r.onerror = reject;
+      r.readAsDataURL(file);
+    });
+  }
+
+  function filepicker(onDone){
+    box.innerHTML = '';
+
+    const row = document.createElement('div');
+    row.className = 'fileRow';
+
+    const inp = document.createElement('input');
+    inp.type = 'file';
+    inp.accept = "image/png,image/jpeg";
+
+    const bUp = document.createElement('button');
+    bUp.textContent = 'Adjuntar imagen';
+    bUp.className = 'primary';
+
+    const bSkip = document.createElement('button');
+    bSkip.textContent = 'Omitir';
+
+    const badge = document.createElement('span');
+    badge.className = 'badge';
+    badge.textContent = 'Ningún archivo seleccionado';
+
+    inp.onchange = () => {
+      if(inp.files && inp.files[0]){
+        badge.textContent = inp.files[0].name;
+      }
+    };
+
+    bSkip.onclick = () => {
+      state.imagenUrl = "";
+      addMsg('me', 'Omitir adjunto');
+      onDone();
+    };
+
+    bUp.onclick = async () => {
+      if(!(inp.files && inp.files[0])) return;
+      const f = inp.files[0];
+      badge.textContent = 'Cargando adjunto…';
+      bUp.disabled = true; bSkip.disabled = true; inp.disabled = true;
+
+      const base64 = await toBase64(f);
+
+      try{
+        const res = await callApi("uploadImage", {
+          fileName: f.name,
+          mimeType: f.type,
+          base64Data: base64
+        });
+
+        if(!res || !res.ok){
+          addMsg('bot', 'No fue posible adjuntar la imagen: ' + (res?.error || 'Error'));
+          state.imagenUrl = "";
+          onDone();
+          return;
+        }
+
+        state.imagenUrl = res.url || "";
+        addMsg('me', 'Imagen adjuntada ✅');
+        onDone();
+
+      }catch(e){
+        addMsg('bot', 'No fue posible adjuntar la imagen. El ticket se registrará igualmente.');
+        state.imagenUrl = "";
+        onDone();
+      }
+    };
+
+    row.appendChild(inp);
+    row.appendChild(bUp);
+    row.appendChild(bSkip);
+
+    box.appendChild(row);
+    box.appendChild(badge);
+  }
+
+  let stepIndex = 0;
+
+  function askCurrentStep(){
+    if (stepIndex < FLOW.length && FLOW[stepIndex].k === "imagen" && state.quiereImagen === "No") {
+      stepIndex++;
+    }
+    const step = FLOW[stepIndex];
+    if (!step) return;
+    pill.textContent = "Paso " + (stepIndex + 1) + " de " + FLOW.length;
+    botSay(step.text, () => renderStep(step));
+  }
+
+  function renderStep(step){
+    if(step.type === "buttons"){
+      btns(step.options, (opt) => {
+        addMsg('me', opt);
+
+        if(step.k === "quiereImagen"){
+          state.quiereImagen = opt;
+          stepIndex++;
+          askCurrentStep();
+          return;
+        }
+
+        state[step.k] = opt;
+        stepIndex++;
+        askCurrentStep();
+      });
+      return;
+    }
+
+    if(step.type === "input"){
+      input(step.placeholder, (v) => {
+        addMsg('me', v);
+        state[step.k] = v;
+        stepIndex++;
+        askCurrentStep();
+      }, step.k === "email" ? "email" : "text");
+      return;
+    }
+
+    if(step.type === "textarea"){
+      textarea(step.placeholder, (v) => {
+        addMsg('me', v);
+        state[step.k] = v;
+        stepIndex++;
+        askCurrentStep();
+      });
+      return;
+    }
+
+    if(step.type === "date"){
+      datepicker((v) => {
+        addMsg('me', v);
+        state[step.k] = v;
+        stepIndex++;
+        askCurrentStep();
+      });
+      return;
+    }
+
+    if(step.type === "file"){
+      filepicker(() => {
+        stepIndex++;
+        askCurrentStep();
+      });
+      return;
+    }
+
+    if(step.type === "confirm"){
+      const resumen =
+        "Resumen del reporte\n" +
+        "- Área: " + state.area + "\n" +
+        "- Prioridad: " + state.prioridad + "\n" +
+        "- Ubicación: " + state.ubicacion + "\n" +
+        "- Descripción: " + state.detalle + "\n" +
+        "- Fecha del incidente: " + state.fecha_incidente + "\n" +
+        "- Solicitante: " + state.nombre + "\n" +
+        "- Correo: " + state.email + "\n" +
+        "- Imagen: " + (state.imagenUrl ? "Adjunta" : "No adjunta") + "\n\n" +
+        "¿Confirma el registro de esta incidencia?";
+
+      addMsg('bot', resumen);
+
+      btns(["Confirmar", "Cancelar"], async (opt) => {
+        addMsg('me', opt);
+
+        if(opt === "Cancelar"){
+          addMsg('bot', "Operación cancelada. Para iniciar un nuevo registro, actualice la página.");
+          box.innerHTML = '<div class="hint">Registro cancelado.</div>';
+          pill.textContent = "Cancelado";
+          return;
+        }
+
+        pill.textContent = "Registrando…";
+        box.innerHTML = '<div class="hint">Procesando la solicitud…</div>';
+
+        try{
+          const res = await callApi("createTicket", {
+            area: state.area,
+            prioridad: state.prioridad,
+            ubicacion: state.ubicacion,
+            detalle: state.detalle,
+            fecha_incidente: state.fecha_incidente,
+            nombre: state.nombre,
+            email: state.email,
+            imagenUrl: state.imagenUrl
+          });
+
+          if(!res || !res.ok){
+            addMsg('bot', "No fue posible registrar la incidencia: " + (res?.error || "Error"));
+            pill.textContent = "Error";
+            box.innerHTML = '<div class="hint">Si lo desea, vuelva a intentar actualizando la página.</div>';
+            return;
+          }
+
+          addMsg('bot',
+            "✅ Registro confirmado.\n\n" +
+            "Número de ticket: " + res.ticketId + "\n" +
+            "Estado inicial: " + (res.estado || "Pendiente") + "\n\n" +
+            "Conserve el número de ticket para su seguimiento."
+          );
+
+          pill.textContent = "Ticket " + res.ticketId;
+          box.innerHTML = '<div class="hint">Para registrar una nueva incidencia, actualice la página.</div>';
+
+        }catch(e){
+          addMsg('bot', "Se produjo un error al registrar la incidencia.");
+          pill.textContent = "Error";
+          box.innerHTML = '<div class="hint">Para reintentar, actualice la página.</div>';
+        }
+      });
+    }
+  }
+
+  addMsg('bot', "📌 Este canal permite registrar incidencias de infraestructura y generar un ticket institucional para su seguimiento.");
+  askCurrentStep();
+</script>
+</body>
+</html>
