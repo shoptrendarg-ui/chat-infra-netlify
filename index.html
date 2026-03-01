@@ -263,14 +263,20 @@
   }
 
   async function callApi(action, payload){
-    const res = await fetch(APPS_SCRIPT_EXEC_URL, {
-      method: "POST",
-      headers: {"Content-Type":"application/json"},
-      body: JSON.stringify({ action, payload })
-    });
-    return await res.json();
-  }
+  const res = await fetch(APPS_SCRIPT_EXEC_URL, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ action: action, payload: payload || {} })
+  });
 
+  const text = await res.text();
+
+  try {
+    return JSON.parse(text);
+  } catch(e) {
+    return { ok:false, error: text || "Respuesta no válida del servidor" };
+  }
+}
   const state = {
     area: "",
     prioridad: "",
@@ -657,4 +663,5 @@
   askCurrentStep();
 </script>
 </body>
+
 </html>
