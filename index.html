@@ -152,6 +152,22 @@ body {
 }
 @keyframes pulse { 0%,100%{box-shadow:0 0 0 3px rgba(21,128,61,.18)} 50%{box-shadow:0 0 0 7px rgba(21,128,61,.06)} }
 
+.hero-org {
+  display: flex; flex-direction: column; gap: 4px;
+}
+.hero-org-line {
+  font-family: var(--ff-mono);
+  font-size: .68rem; letter-spacing: .08em; text-transform: uppercase;
+  color: var(--ink3);
+  padding-left: 2px;
+  line-height: 1.5;
+}
+.hero-org-divider {
+  width: 32px; height: 1.5px;
+  background: var(--border2);
+  margin: 2px 0 2px 2px;
+}
+
 .hero-heading {
   font-family: var(--ff-serif);
   font-size: clamp(2.8rem, 5.5vw, 4rem);
@@ -667,19 +683,24 @@ input[type="date"].inp::-webkit-calendar-picker-indicator { opacity: .45; cursor
   <div class="hero-inner">
     <!-- Izquierda -->
     <div class="hero-left">
-      <div class="hero-eyebrow">
-        <span class="live-dot"></span>
-        Sistema activo · UNSL
+      <div class="hero-org">
+        <div class="hero-eyebrow">
+          <span class="live-dot"></span>
+          Sistema activo · UNSL
+        </div>
+        <div class="hero-org-divider"></div>
+        <div class="hero-org-line">Subsecretaría de Infraestructura</div>
+        <div class="hero-org-line">Informática y Servicios Comunes</div>
       </div>
 
       <h1 class="hero-heading">
-        Reportá un<br/>
-        <em>incidente</em><br/>
-        hoy mismo.
+        Sistema Institucional de<br/>
+        <em>Gestión</em> de<br/>
+        Incidencias
       </h1>
 
       <p class="hero-desc">
-        Registrá incidencias de infraestructura universitaria y recibí un número de ticket para el seguimiento institucional.
+        Registrá incidencias, obtené tu número de ticket y seguí su gestión a través de nuestro sistema oficial de reportes.
       </p>
 
       <button class="hero-btn" onclick="startChat()">
@@ -728,17 +749,6 @@ input[type="date"].inp::-webkit-calendar-picker-indicator { opacity: .45; cursor
           <div class="hcard-step">
             <div class="hcard-num">4</div>
             <span class="hcard-step-text">Confirmá y recibí tu número de ticket</span>
-          </div>
-        </div>
-        <div class="hcard-badge">
-          <div class="hcard-badge-icon">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>
-            </svg>
-          </div>
-          <div class="hcard-badge-text">
-            <b>Datos protegidos</b>
-            <span>Solo personal autorizado accede</span>
           </div>
         </div>
       </div>
