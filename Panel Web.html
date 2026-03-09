@@ -582,7 +582,7 @@ async function save(){
   if(!CURRENT)return;
   var isAdmin=(CTX&&CTX.role==='ADMIN');
   var payload={rowNumber:CURRENT.rowNumber,estado:document.getElementById('mEstado').value,
-    prioridad:isAdmin?(document.getElementById('mPrio').value||')':'',
+    prioridad:isAdmin?(document.getElementById('mPrio').value||''):'',
     comJefe:document.getElementById('mComJefe').value||'',
     comInfra:isAdmin?(document.getElementById('mComInfra').value||''):'',
     msgCierre:isAdmin?(document.getElementById('mMsgCierre').value||''):'',
