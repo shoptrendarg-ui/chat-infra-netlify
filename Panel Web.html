@@ -1,0 +1,942 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
+<title>Panel Institucional — Infraestructura UNSL</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,600;12..96,700;12..96,800&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+
+/* ════════════════════════════════════════
+   TOKENS — Light SaaS Institucional
+════════════════════════════════════════ */
+:root {
+  --bg:       #F1F5F9;
+  --surface:  #FFFFFF;
+  --surface2: #F8FAFC;
+  --border:   #E2E8F0;
+  --border2:  #CBD5E1;
+
+  --ink:    #0F172A;
+  --ink-2:  #334155;
+  --ink-3:  #64748B;
+  --ink-4:  #94A3B8;
+
+  --accent:       #1D4ED8;
+  --accent-2:     #2563EB;
+  --accent-light: #DBEAFE;
+  --accent-pale:  #EFF6FF;
+
+  --pend:     #DC2626; --pend-bg:  #FEF2F2; --pend-br:  #FECACA;
+  --curso:    #D97706; --curso-bg: #FFFBEB; --curso-br: #FDE68A;
+  --fin:      #059669; --fin-bg:   #ECFDF5; --fin-br:   #A7F3D0;
+  --crit:     #7C3AED; --crit-bg:  #F5F3FF; --crit-br:  #DDD6FE;
+
+  --font-head: 'Bricolage Grotesque', sans-serif;
+  --font-body: 'DM Sans', sans-serif;
+  --font-mono: 'DM Mono', monospace;
+
+  --r-sm: 8px; --r: 12px; --r-lg: 18px; --r-xl: 24px;
+  --sh-xs: 0 1px 3px rgba(15,23,42,.06), 0 1px 2px rgba(15,23,42,.04);
+  --sh-sm: 0 4px 12px rgba(15,23,42,.07);
+  --sh-md: 0 10px 30px rgba(15,23,42,.10);
+  --sh-lg: 0 24px 60px rgba(15,23,42,.14), 0 8px 20px rgba(15,23,42,.08);
+  --dur: 170ms; --ease: cubic-bezier(.4,0,.2,1); --spring: cubic-bezier(.34,1.56,.64,1);
+}
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{font-size:14px;-webkit-text-size-adjust:100%}
+body{font-family:var(--font-body);background:var(--bg);color:var(--ink);min-height:100vh;line-height:1.55;overflow-x:hidden}
+::-webkit-scrollbar{width:5px;height:5px}
+::-webkit-scrollbar-thumb{background:var(--border2);border-radius:99px}
+
+/* INPUTS */
+input[type="text"],input[type="password"],input[type="email"],input[type="date"],select,textarea{
+  width:100%;font-family:var(--font-body);font-size:13.5px;color:var(--ink);
+  background:var(--surface);border:1.5px solid var(--border);border-radius:var(--r-sm);
+  padding:9px 12px;outline:none;
+  transition:border-color var(--dur) var(--ease),box-shadow var(--dur) var(--ease);-webkit-appearance:none}
+input::placeholder,textarea::placeholder{color:var(--ink-4)}
+input:focus,select:focus,textarea:focus{border-color:var(--accent-2);box-shadow:0 0 0 3px rgba(37,99,235,.12)}
+input:disabled,select:disabled,textarea:disabled{background:var(--surface2);color:var(--ink-3);cursor:default;border-color:var(--border)}
+select{cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2364748B' stroke-width='2'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center;padding-right:30px}
+option,optgroup{background:#fff;color:var(--ink)}
+textarea{min-height:82px;resize:vertical;line-height:1.55}
+.textarea-tall{min-height:106px}
+
+/* BOTONES */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;
+  font-family:var(--font-body);font-size:13px;font-weight:600;border-radius:var(--r-sm);
+  padding:9px 16px;border:1.5px solid transparent;cursor:pointer;
+  transition:all var(--dur) var(--ease);outline:none;white-space:nowrap}
+.btn:active{transform:translateY(1px)}
+.btn:disabled{opacity:.50;cursor:not-allowed;transform:none}
+.btn-primary{background:var(--accent-2);border-color:var(--accent-2);color:#fff;box-shadow:0 2px 8px rgba(37,99,235,.28)}
+.btn-primary:hover:not(:disabled){background:var(--accent);border-color:var(--accent);box-shadow:0 4px 16px rgba(37,99,235,.38);transform:translateY(-1px)}
+.btn-neutral{background:var(--surface2);border-color:var(--border);color:var(--ink-3)}
+.btn-neutral:hover:not(:disabled){background:var(--surface);border-color:var(--border2);color:var(--ink-2)}
+.btn-danger{background:var(--pend-bg);border-color:var(--pend-br);color:var(--pend)}
+.btn-danger:hover:not(:disabled){background:#FEE2E2;border-color:#FCA5A5}
+.btn-full{width:100%}
+
+/* LOGIN */
+#screen-login{
+  min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;
+  background:radial-gradient(ellipse 800px 500px at 10% 0%,rgba(219,234,254,.7),transparent 65%),
+    radial-gradient(ellipse 500px 400px at 90% 100%,rgba(221,214,254,.45),transparent 65%),
+    var(--bg)}
+.login-card{width:min(440px,100%);background:var(--surface);border:1px solid var(--border);border-radius:var(--r-xl);box-shadow:var(--sh-lg);overflow:hidden}
+.login-hd{padding:30px 32px 22px;background:linear-gradient(135deg,#EFF6FF 0%,#F5F3FF 100%);border-bottom:1px solid var(--border)}
+.login-icon{width:46px;height:46px;background:linear-gradient(135deg,var(--accent-2),#7C3AED);border-radius:13px;display:flex;align-items:center;justify-content:center;font-size:21px;margin-bottom:14px;box-shadow:0 4px 14px rgba(37,99,235,.25)}
+.login-hd h1{font-family:var(--font-head);font-size:20px;font-weight:800;color:var(--ink);letter-spacing:-.3px;line-height:1.2}
+.login-hd p{font-size:11.5px;color:var(--ink-3);margin-top:5px;font-family:var(--font-mono);letter-spacing:.3px}
+.login-body{padding:26px 32px 30px;display:flex;flex-direction:column;gap:14px}
+.field-label{display:block;font-size:11.5px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:var(--ink-3);margin-bottom:6px}
+.login-error{font-size:13px;color:var(--pend);background:var(--pend-bg);border:1px solid var(--pend-br);border-radius:var(--r-sm);padding:10px 14px;min-height:0}
+
+/* TOPBAR */
+#screen-panel{display:none;flex-direction:column;min-height:100vh}
+.topbar{background:var(--surface);border-bottom:1px solid var(--border);padding:0 24px;height:58px;display:flex;align-items:center;justify-content:space-between;gap:16px;position:sticky;top:0;z-index:50;box-shadow:var(--sh-xs)}
+.brand{display:flex;align-items:center;gap:11px}
+.brand-icon{width:33px;height:33px;background:linear-gradient(135deg,var(--accent-2),#7C3AED);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0;box-shadow:0 2px 8px rgba(37,99,235,.22)}
+.brand-text strong{font-family:var(--font-head);font-size:13.5px;font-weight:700;color:var(--ink);display:block;letter-spacing:-.1px;line-height:1.2}
+.brand-text span{font-size:11px;color:var(--ink-4);font-family:var(--font-mono);display:block}
+.topbar-right{display:flex;align-items:center;gap:10px}
+.user-pill{font-family:var(--font-mono);font-size:11.5px;color:var(--ink-3);background:var(--surface2);border:1.5px solid var(--border);border-radius:999px;padding:5px 13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:40vw}
+
+/* MAIN */
+.main-wrap{max-width:1440px;width:100%;margin:0 auto;padding:20px 24px;flex:1}
+.panel-grid{display:grid;grid-template-columns:1fr 280px;gap:16px;align-items:start}
+
+/* CARD */
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);box-shadow:var(--sh-xs);overflow:hidden}
+.card-hd{padding:13px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;background:var(--surface2)}
+.card-label{font-family:var(--font-head);font-size:14px;font-weight:700;color:var(--ink);letter-spacing:-.1px}
+.card-bd{padding:16px 18px}
+
+/* FILTROS */
+.filters{display:flex;gap:8px;flex-wrap:wrap;align-items:center;flex:1}
+.filters input{flex:1;min-width:180px}
+.filters select{min-width:130px}
+
+/* TABLA */
+#tableWrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
+table{width:100%;border-collapse:collapse}
+th{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--ink-3);padding:10px 16px;border-bottom:1.5px solid var(--border);text-align:left;white-space:nowrap;background:var(--surface2)}
+td{padding:12px 16px;border-bottom:1px solid var(--border);font-size:13px;vertical-align:middle;color:var(--ink-2)}
+tr:last-child td{border-bottom:none}
+tbody tr{cursor:pointer;transition:background var(--dur) var(--ease)}
+tbody tr:hover td{background:var(--accent-pale)}
+.tid{font-family:var(--font-mono);font-size:11.5px;color:var(--ink-3);font-weight:500}
+
+/* BADGES estado */
+.badge{display:inline-flex;align-items:center;gap:5px;padding:3px 10px;border-radius:999px;font-size:11.5px;font-weight:700;border:1px solid transparent;white-space:nowrap}
+.dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+.st-Pendiente .badge{background:var(--pend-bg);border-color:var(--pend-br);color:var(--pend)}
+.st-Pendiente .dot{background:var(--pend)}
+.st-Encurso .badge{background:var(--curso-bg);border-color:var(--curso-br);color:var(--curso)}
+.st-Encurso .dot{background:var(--curso)}
+.st-Finalizado .badge{background:var(--fin-bg);border-color:var(--fin-br);color:var(--fin)}
+.st-Finalizado .dot{background:var(--fin)}
+
+/* BADGES prioridad */
+.pr-Critica{background:var(--crit-bg);border:1px solid var(--crit-br);color:var(--crit);border-radius:999px;padding:2px 9px;font-size:11px;font-weight:700}
+.pr-Alta{background:var(--pend-bg);border:1px solid var(--pend-br);color:var(--pend);border-radius:999px;padding:2px 9px;font-size:11px;font-weight:700}
+.pr-Media{background:var(--curso-bg);border:1px solid var(--curso-br);color:var(--curso);border-radius:999px;padding:2px 9px;font-size:11px;font-weight:700}
+.pr-Baja{background:var(--surface2);border:1px solid var(--border);color:var(--ink-3);border-radius:999px;padding:2px 9px;font-size:11px;font-weight:700}
+
+.ver-arrow{color:var(--ink-4);font-size:13px;text-align:right}
+tbody tr:hover .ver-arrow{color:var(--accent-2)}
+.empty-state{padding:48px 20px;text-align:center;color:var(--ink-4);font-size:13.5px}
+
+/* KPIS */
+.kpis{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.kpi{background:var(--surface2);border:1.5px solid var(--border);border-radius:var(--r);padding:16px;transition:border-color var(--dur),box-shadow var(--dur)}
+.kpi:hover{border-color:var(--accent-2);box-shadow:0 0 0 3px rgba(37,99,235,.07)}
+.kpi-n{font-family:var(--font-head);font-size:30px;font-weight:800;color:var(--ink);line-height:1;letter-spacing:-1.5px}
+.kpi-t{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-4);margin-top:6px}
+#kPend{color:var(--pend)}
+#kCurso{color:var(--curso)}
+#kFin{color:var(--fin)}
+
+/* MODAL */
+.modal-overlay{position:fixed;inset:0;z-index:200;background:rgba(15,23,42,.50);backdrop-filter:blur(4px);display:none;padding:16px;overflow-y:auto;align-items:flex-start;justify-content:center}
+.modal{width:min(1020px,100%);margin:auto;background:var(--surface);border:1px solid var(--border);border-radius:var(--r-xl);box-shadow:var(--sh-lg);overflow:hidden;animation:modalIn .24s var(--spring)}
+@keyframes modalIn{from{opacity:0;transform:translateY(16px) scale(.98)}to{opacity:1;transform:translateY(0) scale(1)}}
+.modal-hd{padding:15px 22px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:12px;background:var(--surface2)}
+.modal-title{font-family:var(--font-head);font-size:15px;font-weight:700;color:var(--ink)}
+.modal-body{max-height:calc(100vh - 160px);overflow-y:auto;padding:20px 22px;display:grid;gap:16px}
+.modal-ft{border-top:1px solid var(--border);padding:14px 22px;display:flex;gap:8px;justify-content:flex-end;flex-wrap:wrap;background:var(--surface2)}
+
+/* FORM MODAL */
+.form-2col{display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:start}
+.form-col{display:grid;gap:14px}
+.group{background:var(--surface);border:1.5px solid var(--border);border-radius:var(--r);overflow:hidden}
+.group-title{font-family:var(--font-head);font-size:11.5px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--ink-3);padding:10px 16px;background:var(--surface2);border-bottom:1px solid var(--border)}
+.fields{padding:16px;display:grid;gap:13px}
+.row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.f-label{display:block;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--ink-3);margin-bottom:5px}
+.img-box{font-size:13px;padding:9px 12px;border:1.5px solid var(--border);border-radius:var(--r-sm);background:var(--surface2);color:var(--ink-3);min-height:38px;display:flex;align-items:center}
+.img-box a{color:var(--accent-2);font-weight:600;text-decoration:none}
+.img-box a:hover{text-decoration:underline}
+
+/* PERSONAL */
+.check-list{background:var(--surface2);border:1.5px solid var(--border);border-radius:var(--r-sm);padding:10px;display:grid;gap:4px;max-height:148px;overflow-y:auto}
+.check-item{display:flex;align-items:center;gap:9px;font-size:13px;padding:5px 8px;border-radius:7px;transition:background var(--dur);cursor:pointer}
+.check-item:hover{background:var(--accent-pale)}
+.check-item input[type="checkbox"]{width:15px;height:15px;accent-color:var(--accent-2);flex-shrink:0;cursor:pointer}
+.mini-hint{font-size:12px;color:var(--ink-4);margin-top:5px;line-height:1.4}
+
+/* TOAST */
+.toast{position:fixed;right:20px;bottom:20px;z-index:400;padding:12px 18px;border-radius:var(--r);font-size:13.5px;font-weight:500;display:none;max-width:340px;box-shadow:var(--sh-md);animation:toastIn .28s var(--spring)}
+@keyframes toastIn{from{opacity:0;transform:translateY(12px) scale(.95)}to{opacity:1;transform:translateY(0) scale(1)}}
+
+/* RESPONSIVE */
+@media(max-width:1024px){.panel-grid{grid-template-columns:1fr}.kpis{grid-template-columns:repeat(4,1fr)}}
+@media(max-width:860px){.form-2col{grid-template-columns:1fr}.row3,.row2{grid-template-columns:1fr}.modal-body{max-height:calc(100vh - 200px)}}
+@media(max-width:680px){.main-wrap{padding:14px}.topbar{padding:0 14px;height:52px}.kpis{grid-template-columns:1fr 1fr}.filters input{min-width:100%}input,select,button,textarea{font-size:16px !important}table{min-width:700px}.user-pill{max-width:55vw}}
+
+</style>
+</head>
+<body>
+
+<!-- ══ LOGIN ══ -->
+<div id="screen-login">
+  <div class="login-card">
+    <div class="login-hd">
+      <div class="login-icon">🏛</div>
+      <h1>Panel Institucional</h1>
+      <p>INFRAESTRUCTURA · UNSL · ACCESO RESTRINGIDO</p>
+    </div>
+    <div class="login-body">
+      <div>
+        <label class="field-label" for="loginUser">Usuario</label>
+        <input type="text" id="loginUser" autocomplete="username" placeholder="Ingresá tu usuario" />
+      </div>
+      <div>
+        <label class="field-label" for="loginPass">Contraseña</label>
+        <input type="password" id="loginPass" autocomplete="current-password" placeholder="••••••••" />
+      </div>
+      <button class="btn btn-primary btn-full" id="loginBtn" onclick="doLogin()">Ingresar al panel</button>
+      <div class="login-error" id="loginError"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ PANEL ══ -->
+<div id="screen-panel">
+  <div class="topbar">
+    <div class="brand">
+      <div class="brand-icon">🏛</div>
+      <div class="brand-text">
+        <strong>Sistema Integral de Gestión de Incidencias</strong>
+        <span>Panel interno · Base Central · UNSL</span>
+      </div>
+    </div>
+    <div class="topbar-right">
+      <div class="user-pill" id="userPill">—</div>
+      <button class="btn btn-neutral" onclick="doLogout()">Salir</button>
+    </div>
+  </div>
+  <div class="main-wrap">
+    <div class="panel-grid">
+      <div class="card">
+        <div class="card-hd">
+          <span class="card-label">Incidencias registradas</span>
+          <div class="filters">
+            <input id="q" placeholder="Buscar ticket, área, ubicación, solicitante…" />
+            <span id="areaWrap"><select id="area"></select></span>
+            <select id="status"></select>
+            <button class="btn btn-primary" onclick="load()">Actualizar</button>
+          </div>
+        </div>
+        <div id="tableWrap" class="empty-state">Cargando información…</div>
+      </div>
+      <div class="card">
+        <div class="card-hd">
+          <span class="card-label">Indicadores</span>
+          <button class="btn btn-neutral" onclick="load()">↺</button>
+        </div>
+        <div class="card-bd">
+          <div class="kpis">
+            <div class="kpi"><div class="kpi-n" id="kTotal">—</div><div class="kpi-t">Total</div></div>
+            <div class="kpi"><div class="kpi-n" id="kPend">—</div><div class="kpi-t">Pendientes</div></div>
+            <div class="kpi"><div class="kpi-n" id="kCurso">—</div><div class="kpi-t">En curso</div></div>
+            <div class="kpi"><div class="kpi-n" id="kFin">—</div><div class="kpi-t">Finalizados</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ MODAL ══ -->
+<div class="modal-overlay" id="modalBack">
+  <div class="modal">
+    <div class="modal-hd">
+      <div class="modal-title" id="mTitle">Ticket</div>
+      <button class="btn btn-neutral" onclick="closeModal()">✕ Cerrar</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-2col">
+        <div class="form-col">
+          <div class="group">
+            <div class="group-title">Datos de la incidencia</div>
+            <div class="fields">
+              <div class="row3">
+                <div><span class="f-label">Estado</span><select id="mEstado"></select></div>
+                <div><span class="f-label">Área</span><input id="mArea" disabled /></div>
+                <div><span class="f-label">Prioridad</span><select id="mPrio"></select></div>
+              </div>
+              <div class="row3">
+                <div><span class="f-label">Fecha</span><input id="mFecha" disabled /></div>
+                <div><span class="f-label">Solicitante</span><input id="mNombre" disabled /></div>
+                <div><span class="f-label">Contacto</span><input id="mContacto" disabled /></div>
+              </div>
+              <div class="row2">
+                <div><span class="f-label">Ubicación</span><input id="mUbic" disabled /></div>
+                <div><span class="f-label">Evidencia</span><div id="mImgWrap" class="img-box">—</div></div>
+              </div>
+              <div><span class="f-label">Descripción</span><textarea id="mDetalle" disabled class="textarea-tall"></textarea></div>
+            </div>
+          </div>
+        </div>
+        <div class="form-col">
+          <div class="group">
+            <div class="group-title">Seguimiento y observaciones</div>
+            <div class="fields">
+              <div><span class="f-label">Comentario del área</span><textarea id="mComJefe" placeholder="Ingrese un comentario de seguimiento…"></textarea></div>
+              <div id="infraBlock"><span class="f-label">Comentario de Infraestructura</span><textarea id="mComInfra" placeholder="Ingrese un comentario institucional…"></textarea></div>
+              <div>
+                <span class="f-label">Personal asignado</span>
+                <div id="mPersonalList" class="check-list"><div class="mini-hint">Cargando personal…</div></div>
+                <div class="mini-hint">Se notifica por correo solo al personal nuevo en esta actualización.</div>
+              </div>
+              <div><span class="f-label">Instrucciones para el personal</span><textarea id="mInstrPersonal" placeholder="Instrucciones para el personal asignado…"></textarea></div>
+            </div>
+          </div>
+          <div class="group" id="cierreBlock">
+            <div class="group-title">Notificación de cierre</div>
+            <div class="fields">
+              <div class="row2">
+                <div><span class="f-label">Estado notificación</span><input id="mNotifCierre" disabled /></div>
+                <div><span class="f-label">Enviado el</span><input id="mCierreEnviadoEl" disabled /></div>
+              </div>
+              <div><span class="f-label">Mensaje adicional (opcional)</span><textarea id="mMsgCierre" placeholder="Texto opcional para el correo de cierre…"></textarea></div>
+              <div id="mCierreHint" class="mini-hint"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-ft">
+      <button class="btn btn-danger" id="mDelete" onclick="deleteTicket()">Eliminar ticket</button>
+      <button class="btn btn-danger" id="mSendClose" onclick="sendClose()">Enviar notif. cierre</button>
+      <button class="btn btn-primary" id="mSave" onclick="save()">Guardar cambios</button>
+      <button class="btn btn-neutral" onclick="closeModal()">Cancelar</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* ══════════════════════════════════════════════════════════════
+   CONFIG
+══════════════════════════════════════════════════════════════ */
+var PROXY_URL = "/.netlify/functions/proxy";
+
+/* Leer desde meta tag si existe (para override en test) */
+(function(){
+  var m = document.querySelector('meta[name="proxy-url"]');
+  if(m && m.content) PROXY_URL = m.content;
+})();
+
+/* ══════════════════════════════════════════════════════════════
+   ESTADO GLOBAL
+══════════════════════════════════════════════════════════════ */
+var TOKEN = null;
+var CTX   = null;
+var CURRENT      = null;
+var CURRENT_PEOPLE = [];
+
+var STATUS_OPTIONS   = ["Pendiente","En curso","Finalizado"];
+var PRIORITY_OPTIONS = ["Critica","Alta","Media","Baja"];
+
+/* ══════════════════════════════════════════════════════════════
+   VH FIX (teclado móvil)
+══════════════════════════════════════════════════════════════ */
+function setVh(){
+  try{
+    var vv = window.visualViewport;
+    var h = vv ? vv.height : window.innerHeight;
+    document.documentElement.style.setProperty('--vh', (h * 0.01) + 'px');
+  }catch(e){}
+}
+setVh();
+window.addEventListener('resize', setVh);
+window.addEventListener('orientationchange', setVh);
+if(window.visualViewport){
+  window.visualViewport.addEventListener('resize', setVh);
+  window.visualViewport.addEventListener('scroll', setVh);
+}
+
+/* ══════════════════════════════════════════════════════════════
+   API HELPER
+══════════════════════════════════════════════════════════════ */
+async function api(action, payload, withToken){
+  var body = { action: action, payload: payload || {} };
+  if(withToken && TOKEN) body.token = TOKEN;
+
+  var resp = await fetch(PROXY_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(body)
+  });
+
+  if(!resp.ok) throw new Error('HTTP ' + resp.status);
+  return await resp.json();
+}
+
+/* ══════════════════════════════════════════════════════════════
+   TOAST
+══════════════════════════════════════════════════════════════ */
+var _toastTimer = null;
+
+function toast(msg, color){
+  var t = document.getElementById('toast');
+  t.textContent = msg;
+  t.style.display = 'block';
+  t.style.borderColor = color === 'err'
+    ? 'rgba(255,95,114,.35)'
+    : color === 'ok'
+    ? 'rgba(45,212,160,.35)'
+    : 'rgba(255,255,255,.12)';
+  if(_toastTimer) clearTimeout(_toastTimer);
+  _toastTimer = setTimeout(function(){ t.style.display='none'; }, 4000);
+}
+
+/* ══════════════════════════════════════════════════════════════
+   UTILIDADES DOM
+══════════════════════════════════════════════════════════════ */
+function esc(s){
+  return String(s == null ? '' : s)
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+function setSelectOpts(sel, opts, placeholder){
+  sel.innerHTML = '';
+  if(placeholder != null){
+    var o0 = document.createElement('option');
+    o0.value = ''; o0.textContent = placeholder;
+    sel.appendChild(o0);
+  }
+  (opts||[]).forEach(function(v){
+    var o = document.createElement('option');
+    o.value = v; o.textContent = v;
+    sel.appendChild(o);
+  });
+}
+
+function splitAssigned(s){
+  var raw = String(s||'').trim();
+  if(!raw) return [];
+  return raw.split(/[;,]/g).map(function(x){ return String(x||'').trim(); }).filter(Boolean);
+}
+
+function buildPersonalList(people, selectedNames){
+  var wrap = document.getElementById('mPersonalList');
+  wrap.innerHTML = '';
+
+  if(!people || !people.length){
+    wrap.innerHTML = '<div class="mini-hint">No hay personal activo cargado para esta área.</div>';
+    return;
+  }
+
+  var selSet = new Set((selectedNames||[]).map(function(x){ return String(x).toLowerCase(); }));
+
+  people.forEach(function(p){
+    var lbl = document.createElement('label');
+    lbl.className = 'check-item';
+
+    var cb = document.createElement('input');
+    cb.type = 'checkbox';
+    cb.value = p.name;
+    cb.checked = selSet.has(String(p.name).toLowerCase());
+
+    var sp = document.createElement('span');
+    sp.textContent = p.name;
+
+    lbl.appendChild(cb); lbl.appendChild(sp);
+    wrap.appendChild(lbl);
+  });
+}
+
+function getSelectedPersonal(){
+  var boxes = document.querySelectorAll('#mPersonalList input[type="checkbox"]');
+  var out = [];
+  boxes.forEach(function(b){ if(b.checked) out.push(String(b.value||'').trim()); });
+  return out;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   LOGIN
+══════════════════════════════════════════════════════════════ */
+document.getElementById('loginUser').addEventListener('keydown', function(e){
+  if(e.key === 'Enter') document.getElementById('loginPass').focus();
+});
+document.getElementById('loginPass').addEventListener('keydown', function(e){
+  if(e.key === 'Enter') doLogin();
+});
+
+async function doLogin(){
+  var user = document.getElementById('loginUser').value.trim();
+  var pass = document.getElementById('loginPass').value.trim();
+  var btn  = document.getElementById('loginBtn');
+  var err  = document.getElementById('loginError');
+
+  err.textContent = '';
+
+  if(!user || !pass){
+    err.textContent = 'Ingrese usuario y contraseña.';
+    return;
+  }
+
+  btn.disabled = true;
+  btn.textContent = 'Verificando…';
+
+  try{
+    var res = await api('login', { user: user, pass: pass }, false);
+
+    if(!res || !res.ok){
+      err.textContent = (res && res.error) ? res.error : 'Error de autenticación.';
+      btn.disabled = false;
+      btn.textContent = 'Ingresar';
+      return;
+    }
+
+    TOKEN = res.token;
+    CTX   = res.ctx;
+
+    /* Guardar en sessionStorage para F5 */
+    try{
+      sessionStorage.setItem('panel_token', TOKEN);
+      sessionStorage.setItem('panel_ctx', JSON.stringify(CTX));
+    }catch(e){}
+
+    showPanel();
+
+  }catch(e){
+    err.textContent = 'Error de conexión. Verifique su red.';
+    btn.disabled = false;
+    btn.textContent = 'Ingresar';
+  }
+}
+
+function doLogout(){
+  TOKEN = null; CTX = null;
+  try{ sessionStorage.removeItem('panel_token'); sessionStorage.removeItem('panel_ctx'); }catch(e){}
+  document.getElementById('screen-panel').style.display = 'none';
+  document.getElementById('screen-login').style.display = 'flex';
+  document.getElementById('loginUser').value = '';
+  document.getElementById('loginPass').value = '';
+  document.getElementById('loginError').textContent = '';
+  document.getElementById('loginBtn').disabled = false;
+  document.getElementById('loginBtn').textContent = 'Ingresar';
+}
+
+/* ══════════════════════════════════════════════════════════════
+   MOSTRAR PANEL (post-login)
+══════════════════════════════════════════════════════════════ */
+function showPanel(){
+  document.getElementById('screen-login').style.display = 'none';
+  document.getElementById('screen-panel').style.display = 'flex';
+
+  /* userPill */
+  var pill = document.getElementById('userPill');
+  pill.textContent = (CTX.email || '—') + ' · ' + CTX.role
+    + (CTX.role === 'JEFE' ? ' · ' + CTX.areaKey : '');
+
+  /* Filtro de área (solo ADMIN) */
+  if(CTX.role === 'ADMIN'){
+    document.getElementById('areaWrap').style.display = 'inline';
+    setSelectOpts(document.getElementById('area'), [], 'Área (todas)');
+  } else {
+    document.getElementById('areaWrap').style.display = 'none';
+  }
+
+  /* Filtro de estado */
+  setSelectOpts(document.getElementById('status'), STATUS_OPTIONS, 'Estado (todos)');
+
+  load();
+}
+
+/* ══════════════════════════════════════════════════════════════
+   CARGAR TICKETS
+══════════════════════════════════════════════════════════════ */
+async function load(){
+  var params = {
+    q:      document.getElementById('q').value || '',
+    status: document.getElementById('status').value || '',
+    area:   (CTX && CTX.role === 'ADMIN') ? (document.getElementById('area').value || '') : ''
+  };
+
+  document.getElementById('tableWrap').innerHTML =
+    '<div class="empty-state">Cargando incidencias…</div>';
+
+  try{
+    var res = await api('listTickets', params, true);
+
+    /* sesión expirada */
+    if(res && res.authError){ doLogout(); return; }
+
+    if(!res || !res.ok){
+      document.getElementById('tableWrap').innerHTML =
+        '<div class="empty-state">Error: ' + esc((res && res.error) || 'No fue posible cargar') + '</div>';
+      toast((res && res.error) || 'Error al cargar', 'err');
+      return;
+    }
+
+    /* Actualizar filtro áreas (ADMIN) */
+    if(CTX && CTX.role === 'ADMIN'){
+      var areaSel = document.getElementById('area');
+      var oldArea = areaSel.value;
+      setSelectOpts(areaSel, res.areas || [], 'Área (todas)');
+      if(oldArea) areaSel.value = oldArea;
+    }
+
+    if(res.statusOptions)   STATUS_OPTIONS   = res.statusOptions;
+    if(res.priorityOptions) PRIORITY_OPTIONS = res.priorityOptions;
+
+    var tickets = res.tickets || [];
+
+    /* KPIs */
+    document.getElementById('kTotal').textContent = tickets.length;
+    document.getElementById('kPend').textContent  = tickets.filter(function(t){ return t.estado === 'Pendiente';  }).length;
+    document.getElementById('kCurso').textContent = tickets.filter(function(t){ return t.estado === 'En curso';   }).length;
+    document.getElementById('kFin').textContent   = tickets.filter(function(t){ return t.estado === 'Finalizado'; }).length;
+
+    /* Tabla */
+    if(!tickets.length){
+      document.getElementById('tableWrap').innerHTML =
+        '<div class="empty-state">No se encontraron incidencias con los filtros actuales.</div>';
+      return;
+    }
+
+    var stClass = {
+      'Pendiente':  'st-Pendiente',
+      'En curso':   'st-Encurso',
+      'Finalizado': 'st-Finalizado'
+    };
+
+    var rows = '';
+    tickets.forEach(function(t){
+      var sc  = stClass[t.estado] || '';
+      var enc = encodeURIComponent(JSON.stringify(t));
+
+      rows += '<tr onclick="openModal(\'' + enc + '\')" style="cursor:pointer">'
+        + '<td class="tid">' + esc(t.ticketId) + '</td>'
+        + '<td>' + esc(t.area) + '</td>'
+        + '<td><div class="' + sc + '"><span class="badge"><span class="dot"></span>' + esc(t.estado) + '</span></div></td>'
+        + '<td>' + esc(t.prioridad) + '</td>'
+        + '<td>' + esc(String(t.ubicacion||'').slice(0,42)) + (String(t.ubicacion||'').length > 42 ? '…' : '') + '</td>'
+        + '<td style="color:var(--muted2)">' + esc(String(t.detalle||'').slice(0,55)) + (String(t.detalle||'').length > 55 ? '…' : '') + '</td>'
+        + '<td style="color:var(--muted);font-family:var(--mono);font-size:11px">' + esc(t.fecha) + '</td>'
+        + '<td class="ver-arrow">→</td>'
+        + '</tr>';
+    });
+
+    document.getElementById('tableWrap').innerHTML =
+      '<table>'
+      + '<thead><tr>'
+      + '<th>Ticket</th><th>Área</th><th>Estado</th><th>Prioridad</th><th>Ubicación</th><th>Descripción</th><th>Fecha</th><th></th>'
+      + '</tr></thead>'
+      + '<tbody>' + rows + '</tbody>'
+      + '</table>';
+
+  }catch(e){
+    document.getElementById('tableWrap').innerHTML =
+      '<div class="empty-state">Error de conexión.</div>';
+    toast('Error de conexión', 'err');
+  }
+}
+
+/* ══════════════════════════════════════════════════════════════
+   MODAL: ABRIR
+══════════════════════════════════════════════════════════════ */
+async function openModal(enc){
+  var t = JSON.parse(decodeURIComponent(enc));
+  CURRENT = t;
+
+  document.getElementById('mTitle').textContent     = 'Ticket ' + (t.ticketId || '');
+  document.getElementById('mArea').value            = t.area || '';
+  document.getElementById('mFecha').value           = t.fecha || '';
+  document.getElementById('mNombre').value          = t.nombre || '';
+  document.getElementById('mContacto').value        = t.contacto || '';
+  document.getElementById('mUbic').value            = t.ubicacion || '';
+  document.getElementById('mDetalle').value         = t.detalle || '';
+  document.getElementById('mComJefe').value         = t.comJefe || '';
+  document.getElementById('mComInfra').value        = t.comInfra || '';
+  document.getElementById('mNotifCierre').value     = t.notifCierre || 'Pendiente';
+  document.getElementById('mCierreEnviadoEl').value = t.cierreEnviadoEl || '—';
+  document.getElementById('mMsgCierre').value       = t.msgCierre || '';
+  document.getElementById('mInstrPersonal').value   = t.instrPersonal || '';
+
+  /* imagen */
+  var imgWrap = document.getElementById('mImgWrap');
+  if(t.imagen){
+    imgWrap.innerHTML = '<a href="' + t.imagen + '" target="_blank">Ver evidencia adjunta</a>';
+  } else {
+    imgWrap.textContent = 'Sin imagen adjunta';
+  }
+
+  /* Estado */
+  var stSel = document.getElementById('mEstado');
+  stSel.innerHTML = '';
+  STATUS_OPTIONS.forEach(function(s){
+    var o = document.createElement('option');
+    o.value = s; o.textContent = s;
+    stSel.appendChild(o);
+  });
+  stSel.value = t.estado || STATUS_OPTIONS[0];
+
+  /* Prioridad */
+  var prSel = document.getElementById('mPrio');
+  prSel.innerHTML = '';
+  PRIORITY_OPTIONS.forEach(function(p){
+    var o = document.createElement('option');
+    o.value = p; o.textContent = p;
+    prSel.appendChild(o);
+  });
+  prSel.value = (PRIORITY_OPTIONS.indexOf(t.prioridad) >= 0) ? t.prioridad : PRIORITY_OPTIONS[0];
+
+  var canEdit = (CTX && (CTX.role === 'ADMIN' || CTX.role === 'JEFE'));
+  var isAdmin = (CTX && CTX.role === 'ADMIN');
+
+  /* Permisos de edición */
+  document.getElementById('mSave').disabled       = !canEdit;
+  document.getElementById('mComJefe').disabled    = !canEdit;
+  document.getElementById('mEstado').disabled     = !canEdit;
+  document.getElementById('mPrio').disabled       = !isAdmin;
+  document.getElementById('mMsgCierre').disabled  = !isAdmin;
+  document.getElementById('mInstrPersonal').disabled = !canEdit;
+
+  /* Bloques condicionales */
+  document.getElementById('infraBlock').style.display  = isAdmin ? 'block' : 'none';
+  document.getElementById('cierreBlock').style.display = isAdmin ? 'block' : 'none';
+  document.getElementById('mSendClose').style.display  = isAdmin ? 'inline-flex' : 'none';
+  document.getElementById('mDelete').style.display     = isAdmin ? 'inline-flex' : 'none';
+
+  /* Hint cierre */
+  if(isAdmin){
+    var notifUp = String(t.notifCierre||'').toUpperCase();
+    var yaEnv = (notifUp === 'ENVIADO' || notifUp === 'ENVIADA');
+    var puedeEnv = (t.estado === 'Finalizado') && !yaEnv;
+    document.getElementById('mSendClose').disabled = !puedeEnv;
+    document.getElementById('mCierreHint').textContent =
+      yaEnv ? 'La notificación de cierre ya fue enviada.'
+      : t.estado !== 'Finalizado' ? 'El estado debe ser Finalizado para enviar el cierre.'
+      : '';
+  } else {
+    document.getElementById('mCierreHint').textContent = '';
+  }
+
+  /* Personal */
+  var selected = splitAssigned(t.personalAsignado || '');
+  document.getElementById('mPersonalList').innerHTML =
+    '<div class="mini-hint">Cargando personal del área…</div>';
+
+  try{
+    var res = await api('listPersonalByArea', { area: t.area || '' }, true);
+    if(res && res.authError){ doLogout(); return; }
+    CURRENT_PEOPLE = (res && res.ok && res.people) ? res.people : [];
+    buildPersonalList(CURRENT_PEOPLE, selected);
+  }catch(e){
+    document.getElementById('mPersonalList').innerHTML =
+      '<div class="mini-hint">No fue posible cargar personal.</div>';
+  }
+
+  /* Mostrar overlay */
+  document.getElementById('modalBack').style.display = 'flex';
+}
+
+function closeModal(){
+  document.getElementById('modalBack').style.display = 'none';
+  CURRENT = null;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   GUARDAR CAMBIOS
+══════════════════════════════════════════════════════════════ */
+async function save(){
+  if(!CURRENT) return;
+
+  var isAdmin = (CTX && CTX.role === 'ADMIN');
+  var sel = getSelectedPersonal();
+
+  var payload = {
+    rowNumber:        CURRENT.rowNumber,
+    estado:           document.getElementById('mEstado').value,
+    prioridad:        isAdmin ? (document.getElementById('mPrio').value || '') : '',
+    comJefe:          document.getElementById('mComJefe').value || '',
+    comInfra:         isAdmin ? (document.getElementById('mComInfra').value || '') : '',
+    msgCierre:        isAdmin ? (document.getElementById('mMsgCierre').value || '') : '',
+    personalAsignado: sel.join('; '),
+    instrPersonal:    document.getElementById('mInstrPersonal').value || ''
+  };
+
+  var btn = document.getElementById('mSave');
+  btn.disabled = true;
+  btn.textContent = 'Guardando…';
+
+  try{
+    var res = await api('updateTicket', payload, true);
+
+    btn.disabled = false;
+    btn.textContent = 'Guardar cambios';
+
+    if(res && res.authError){ doLogout(); return; }
+
+    if(!res || !res.ok){
+      toast((res && res.error) || 'No fue posible guardar', 'err');
+      return;
+    }
+
+    toast('Cambios guardados correctamente', 'ok');
+    closeModal();
+    load();
+
+  }catch(e){
+    btn.disabled = false;
+    btn.textContent = 'Guardar cambios';
+    toast('Error de conexión', 'err');
+  }
+}
+
+/* ══════════════════════════════════════════════════════════════
+   ELIMINAR TICKET
+══════════════════════════════════════════════════════════════ */
+async function deleteTicket(){
+  if(!CURRENT) return;
+
+  if(!confirm('¿Eliminar el ticket ' + (CURRENT.ticketId||'') + '? Esta acción no se puede deshacer.')) return;
+
+  var btn = document.getElementById('mDelete');
+  btn.disabled = true;
+  btn.textContent = 'Eliminando…';
+
+  try{
+    var res = await api('deleteTicket', { rowNumber: CURRENT.rowNumber }, true);
+
+    btn.textContent = 'Eliminar ticket';
+
+    if(res && res.authError){ doLogout(); return; }
+
+    if(!res || !res.ok){
+      btn.disabled = false;
+      toast((res && res.error) || 'No fue posible eliminar', 'err');
+      return;
+    }
+
+    toast('Ticket eliminado', 'ok');
+    closeModal();
+    load();
+
+  }catch(e){
+    btn.disabled = false;
+    btn.textContent = 'Eliminar ticket';
+    toast('Error de conexión', 'err');
+  }
+}
+
+/* ══════════════════════════════════════════════════════════════
+   ENVIAR CIERRE
+══════════════════════════════════════════════════════════════ */
+async function sendClose(){
+  if(!CURRENT) return;
+
+  var isAdmin = (CTX && CTX.role === 'ADMIN');
+  var sel = getSelectedPersonal();
+
+  /* 1. guardar cambios primero */
+  var savePayload = {
+    rowNumber:        CURRENT.rowNumber,
+    estado:           document.getElementById('mEstado').value,
+    prioridad:        isAdmin ? (document.getElementById('mPrio').value || '') : '',
+    comJefe:          document.getElementById('mComJefe').value || '',
+    comInfra:         document.getElementById('mComInfra').value || '',
+    msgCierre:        document.getElementById('mMsgCierre').value || '',
+    personalAsignado: sel.join('; '),
+    instrPersonal:    document.getElementById('mInstrPersonal').value || ''
+  };
+
+  var btn = document.getElementById('mSendClose');
+  btn.disabled = true;
+  btn.textContent = 'Enviando…';
+
+  try{
+    var r1 = await api('updateTicket', savePayload, true);
+    if(r1 && r1.authError){ doLogout(); return; }
+    if(!r1 || !r1.ok){
+      btn.disabled = false;
+      btn.textContent = 'Enviar notif. cierre';
+      toast((r1 && r1.error) || 'No fue posible guardar antes de enviar', 'err');
+      return;
+    }
+
+    /* 2. enviar cierre */
+    var r2 = await api('sendCloseTicket', { rowNumber: CURRENT.rowNumber }, true);
+    if(r2 && r2.authError){ doLogout(); return; }
+
+    btn.textContent = 'Enviar notif. cierre';
+
+    if(!r2 || !r2.ok){
+      btn.disabled = false;
+      toast((r2 && r2.error) || 'No fue posible enviar la notificación', 'err');
+      return;
+    }
+
+    document.getElementById('mNotifCierre').value     = r2.notifCierre || 'Enviado';
+    document.getElementById('mCierreEnviadoEl').value = r2.cierreEnviadoEl || '';
+    document.getElementById('mCierreHint').textContent = 'La notificación de cierre ya fue enviada.';
+    btn.disabled = true;
+
+    toast('Notificación de cierre enviada', 'ok');
+    closeModal();
+    load();
+
+  }catch(e){
+    btn.disabled = false;
+    btn.textContent = 'Enviar notif. cierre';
+    toast('Error de conexión', 'err');
+  }
+}
+
+/* ══════════════════════════════════════════════════════════════
+   TECLADO
+══════════════════════════════════════════════════════════════ */
+document.addEventListener('keydown', function(e){
+  if(e.key === 'Enter' && e.target && e.target.id === 'q') load();
+  if(e.key === 'Escape') closeModal();
+});
+
+/* ══════════════════════════════════════════════════════════════
+   AUTO-LOGIN (sessionStorage)
+══════════════════════════════════════════════════════════════ */
+(function(){
+  try{
+    var t = sessionStorage.getItem('panel_token');
+    var c = sessionStorage.getItem('panel_ctx');
+    if(t && c){
+      TOKEN = t;
+      CTX   = JSON.parse(c);
+      showPanel();
+    }
+  }catch(e){}
+})();
+</script>
+</body>
+</html>
