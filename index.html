@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
-<title>Sistema Institucional de Reporte de Infraestructura</title>
+<title>Sistema Institucional de Reportes de Infraestructura</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,700;1,9..144,300;1,9..144,600;1,9..144,700&family=Geist+Mono:wght@400;500&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
@@ -697,7 +697,7 @@ input[type="date"].inp::-webkit-calendar-picker-indicator { opacity: .45; cursor
       </div>
       <div>
         <div class="cq-header-name">Infraestructura UNSL</div>
-        <span class="cq-header-sub">Sistema Institucional de Incidencias</span>
+        <span class="cq-header-sub">Sistema Institucional Gestión de Incidencias</span>
       </div>
     </div>
     <button class="cq-back" onclick="backToHero()">← Volver al inicio</button>
@@ -1031,7 +1031,7 @@ const state = {
 
 const FLOW = [
   {k:"area",          type:"buttons",  text:"¡Hola! Bienvenido al sistema de reportes internos de infraestructura.\n\n¿A qué área corresponde el incidente?", options:["Limpieza","Vigilancia","Mantenimiento","Informática","Campo"]},
-  {k:"prioridad",     type:"buttons",  text:"¿Cuál es la prioridad del incidente?", options:["Baja","Media","Alta","Critica"]},
+  {k:"prioridad",     type:"buttons",  text:"¿Cuál es la prioridad percibida del incidente?", options:["Baja","Media","Alta","Critica"]},
   {k:"ubicacion",     type:"input",    text:"¿Dónde ocurrió el incidente?\nEjemplo: Aula 16 – Campus Universitario", placeholder:"Ubicación (sector, referencia o aula)"},
   {k:"fecha_incidente",type:"date",    text:"Fecha del incidente"},
   {k:"detalle",       type:"textarea", text:"Describe en detalle el incidente ocurrido. ¿Qué sucede?", placeholder:"Descripción (qué ocurre, desde cuándo y cualquier dato útil para su verificación)"},
@@ -1329,3 +1329,4 @@ showOnly('screen-hero');
 </script>
 </body>
 </html>
+
