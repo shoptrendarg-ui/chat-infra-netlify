@@ -940,10 +940,13 @@ async function consultarTicket(){
     const stripCls = 'strip-'+estadoKey;
 
     let comentarioHtml = '';
+    // ✅ CAMBIO: solo se muestra el comentario de Infraestructura (comInfra).
+    // El comentario del jefe de área (comJefe) NO se muestra en la consulta pública.
+    // El backend ya filtra y devuelve solo comInfra en res.comentario.
     if(res.comentario && res.comentario.trim()){
       comentarioHtml = `
         <div class="cq-comentario">
-          <div class="cq-comentario-label">Actualización del área</div>
+          <div class="cq-comentario-label">Actualización de Infraestructura</div>
           <div class="cq-comentario-text">"${escHtml(res.comentario)}"</div>
         </div>`;
     }
