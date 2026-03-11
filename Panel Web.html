@@ -607,12 +607,17 @@ async function load(){
         +'<td><span class="'+(pc[t.prioridad]||'pr-baja')+'">'+esc(t.prioridad)+'</span></td>'
         +'<td style="color:var(--muted2)">'+esc(String(t.ubicacion||'').slice(0,34))+(String(t.ubicacion||'').length>34?'…':'')+'</td>'
         +'<td style="font-family:var(--mono);font-size:10.5px;color:var(--muted)">'+esc(t.fecha)+'</td>'
+        // ✅ NUEVA COLUMNA: Personal asignado
+        +'<td style="font-size:11.5px;color:var(--muted2)">'+esc(String(t.personalAsignado||'').slice(0,30))+(String(t.personalAsignado||'').length>30?'…':'')+'</td>'
+        // ✅ NUEVA COLUMNA: Fecha de finalización (= cierreEnviadoEl)
+        +'<td style="font-family:var(--mono);font-size:10.5px;color:var(--muted)">'+esc(t.cierreEnviadoEl||'—')+'</td>'
         +'<td class="tcell-arr">›</td>'
         +'</tr>';
     });
     document.getElementById('tableWrap').innerHTML=
       '<table><thead><tr>'
-      +'<th>Ticket</th><th>Área</th><th>Estado</th><th>Prioridad</th><th>Ubicación</th><th>Fecha</th><th></th>'
+      +'<th>Ticket</th><th>Área</th><th>Estado</th><th>Prioridad</th><th>Ubicación</th><th>Fecha</th>'
+      +'<th>Personal asignado</th><th>Fecha finalización</th><th></th>'
       +'</tr></thead><tbody>'+rows+'</tbody></table>';
   }catch(e){
     document.getElementById('tableWrap').innerHTML='<div class="empty">Error de conexión.</div>';
@@ -657,12 +662,16 @@ function openModal(enc){
   document.getElementById('mSave').disabled=!canEdit;
   document.getElementById('mComJefe').disabled=!canEdit;
   document.getElementById('mEstado').disabled=!canEdit;
-  document.getElementById('mPrio').disabled=!isAdmin;
+  // ✅ CAMBIO: JEFE también puede cambiar prioridad
+  document.getElementById('mPrio').disabled=!canEdit;
   document.getElementById('mMsgCierre').disabled=!isAdmin;
   document.getElementById('mInstrPersonal').disabled=!canEdit;
-  document.getElementById('infraBlock').style.display=isAdmin?'flex':'none';
+  // ✅ CAMBIO: infraBlock visible para JEFE pero NO editable (solo lectura)
+  document.getElementById('infraBlock').style.display=canEdit?'flex':'none';
+  document.getElementById('mComInfra').disabled=!isAdmin;
   document.getElementById('cierreBlock').style.display=isAdmin?'flex':'none';
   document.getElementById('mSendClose').style.display=isAdmin?'inline-flex':'none';
+  // ✅ CAMBIO: botón eliminar solo visible para ADMIN
   document.getElementById('mDelete').style.display=isAdmin?'inline-flex':'none';
 
   if(isAdmin){
@@ -704,10 +713,11 @@ function closeModal(){
 async function save(){
   if(!CURRENT)return;
   var isAdmin=(CTX&&CTX.role==='ADMIN');
+  var canEdit=(CTX&&(CTX.role==='ADMIN'||CTX.role==='JEFE'));
   var payload={
     rowNumber:CURRENT.rowNumber,
     estado:document.getElementById('mEstado').value,
-    prioridad:isAdmin?(document.getElementById('mPrio').value||''):'',
+    prioridad:canEdit?(document.getElementById('mPrio').value||''):'',
     comJefe:document.getElementById('mComJefe').value||'',
     comInfra:isAdmin?(document.getElementById('mComInfra').value||''):'',
     msgCierre:isAdmin?(document.getElementById('mMsgCierre').value||''):'',
