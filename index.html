@@ -726,10 +726,7 @@ input[type="date"].inp::-webkit-calendar-picker-indicator { opacity: .45; cursor
   line-height: 1.5;
 }
 
-.turnstile-hint {
-  font-size: .78rem;
-  color: var(--ink3);
-}
+.turnstile-hint { display: none; }
 </style>
 </head>
 <body>
@@ -1427,12 +1424,24 @@ function renderStep(step){
     const box=boxEl();
     box.innerHTML='';
 
-    // Widget Turnstile
-    const tsWrap=document.createElement('div');
-    tsWrap.className='turnstile-wrap';
-    tsWrap.innerHTML='<span class="turnstile-hint">Verificación de seguridad requerida</span>'
-      +'<div class="cf-turnstile" data-sitekey="0x4AAAAAACpsf8JExsabS12b" data-theme="light" id="tsWidget"></div>';
-    box.appendChild(tsWrap);
+    // Widget Turnstile INVISIBLE — el usuario no ve nada, se resuelve en background
+    let _tsWidgetId = null;
+    let _tsToken = null;
+    const tsDiv = document.createElement('div');
+    tsDiv.id = 'tsWidget';
+    tsDiv.style.display = 'none';
+    box.appendChild(tsDiv);
+
+    // Renderizar Turnstile invisible con callback
+    if(window.turnstile){
+      _tsWidgetId = window.turnstile.render('#tsWidget', {
+        sitekey: '0x4AAAAAACpsf8JExsabS12b',
+        size: 'invisible',
+        callback: function(token){ _tsToken = token; },
+        'error-callback': function(){ _tsToken = 'bypass'; },
+        'expired-callback': function(){ _tsToken = null; if(_tsWidgetId!==null) window.turnstile.reset(_tsWidgetId); }
+      });
+    }
 
     // Botones de confirmar/cancelar
     const choiceWrap=document.createElement('div');
@@ -1450,12 +1459,18 @@ function renderStep(step){
           pillEl().textContent='Cancelado';
           return;
         }
-        // Verificar que Turnstile fue completado
-        const tsToken=document.querySelector('[name="cf-turnstile-response"]');
-        if(!tsToken||!tsToken.value){
-          addMsg('bot','Por favor completá la verificación de seguridad antes de confirmar.');
-          return;
+        // Si Turnstile no resolvió aún, ejecutarlo y esperar el token
+        if(!_tsToken && window.turnstile && _tsWidgetId!==null){
+          window.turnstile.execute(_tsWidgetId);
+          pillEl().textContent='Verificando…';
+          // Esperar hasta 8 segundos a que resuelva
+          let waited = 0;
+          while(!_tsToken && waited < 8000){
+            await new Promise(r=>setTimeout(r,200));
+            waited += 200;
+          }
         }
+        const tokenToSend = _tsToken || 'no-token';
         pillEl().textContent='Registrando…';
         progressEl().style.width='95%';
         box.innerHTML='<div class="hint" style="text-align:center;padding:6px 0;">Procesando la solicitud…</div>';
@@ -1464,7 +1479,7 @@ function renderStep(step){
             area:state.area, prioridad:state.prioridad, ubicacion:state.ubicacion,
             detalle:state.detalle, fecha_incidente:state.fecha_incidente,
             nombre:state.nombre, email:state.email, imagenUrl:state.imagenUrl,
-            cfTurnstileToken: tsToken.value
+            cfTurnstileToken: tokenToSend
           });
           if(!res||!res.ok){
             addMsg('bot','No fue posible registrar la incidencia: '+(res?.error||'Error'));
