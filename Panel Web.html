@@ -126,6 +126,8 @@ tbody tr:hover td{background:rgba(59,130,246,.06)}
 .tcell-id{font-family:var(--mono);font-size:10.5px;color:var(--muted2)}
 .tcell-arr{color:var(--muted);font-size:13px;text-align:right;padding-right:8px}
 tbody tr:hover .tcell-arr{color:var(--blue)}
+/* ✅ CAMBIO 2: columna personal asignado — texto truncado si es largo */
+.tcell-personal{max-width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--muted2);font-size:11.5px}
 
 /* BADGES */
 .badge{display:inline-flex;align-items:center;gap:4px;padding:2px 8px;border-radius:999px;font-size:11px;font-weight:600;border:1px solid transparent;white-space:nowrap}
@@ -360,6 +362,7 @@ tbody tr:hover .tcell-arr{color:var(--blue)}
           <div class="g3">
             <div class="fld"><label>Estado</label><select id="mEstado"></select></div>
             <div class="fld"><label>Área</label><input id="mArea" disabled/></div>
+            <!-- ✅ CAMBIO 1: el selector de prioridad es editable para ADMIN y JEFE -->
             <div class="fld"><label>Prioridad</label><select id="mPrio"></select></div>
           </div>
           <div class="g3">
@@ -385,6 +388,7 @@ tbody tr:hover .tcell-arr{color:var(--blue)}
             <textarea id="mComJefe" placeholder="Ingrese un comentario…"></textarea>
           </div>
 
+          <!-- ✅ CAMBIO 1: infraBlock visible para ADMIN y JEFE, pero JEFE lo ve deshabilitado -->
           <div class="fld" id="infraBlock">
             <label>Comentario Infraestructura</label>
             <textarea id="mComInfra" placeholder="Comentario institucional…"></textarea>
@@ -423,6 +427,7 @@ tbody tr:hover .tcell-arr{color:var(--blue)}
     </div>
 
     <div class="modal-ft">
+      <!-- ✅ CAMBIO 1: Eliminar solo visible para ADMIN (controlado en JS) -->
       <button class="btn btn-red"  id="mDelete"    onclick="deleteTicket()">Eliminar</button>
       <button class="btn btn-red"  id="mSendClose" onclick="sendClose()">Enviar cierre</button>
       <button class="btn btn-blue" id="mSave"      onclick="save()">Guardar</button>
@@ -600,6 +605,9 @@ async function load(){
     var rows='';
     tks.forEach(function(t){
       var enc=encodeURIComponent(JSON.stringify(t));
+      // ✅ CAMBIO 2: se agregan columnas "Personal asignado" y "Fecha finalización"
+      var personalDisplay=String(t.personalAsignado||'').trim()||'—';
+      var fechaFin=String(t.cierreEnviadoEl||'').trim()||'—';
       rows+='<tr onclick="openModal(\''+enc+'\')">'
         +'<td class="tcell-id">'+esc(t.ticketId)+'</td>'
         +'<td>'+esc(t.area)+'</td>'
@@ -607,17 +615,17 @@ async function load(){
         +'<td><span class="'+(pc[t.prioridad]||'pr-baja')+'">'+esc(t.prioridad)+'</span></td>'
         +'<td style="color:var(--muted2)">'+esc(String(t.ubicacion||'').slice(0,34))+(String(t.ubicacion||'').length>34?'…':'')+'</td>'
         +'<td style="font-family:var(--mono);font-size:10.5px;color:var(--muted)">'+esc(t.fecha)+'</td>'
-        // ✅ NUEVA COLUMNA: Personal asignado
-        +'<td style="font-size:11.5px;color:var(--muted2)">'+esc(String(t.personalAsignado||'').slice(0,30))+(String(t.personalAsignado||'').length>30?'…':'')+'</td>'
-        // ✅ NUEVA COLUMNA: Fecha de finalización (= cierreEnviadoEl)
-        +'<td style="font-family:var(--mono);font-size:10.5px;color:var(--muted)">'+esc(t.cierreEnviadoEl||'—')+'</td>'
+        +'<td class="tcell-personal" title="'+esc(t.personalAsignado||'')+'">'+esc(personalDisplay)+'</td>'
+        +'<td style="font-family:var(--mono);font-size:10.5px;color:var(--muted)">'+esc(fechaFin)+'</td>'
         +'<td class="tcell-arr">›</td>'
         +'</tr>';
     });
+    // ✅ CAMBIO 2: thead con las nuevas columnas Personal asignado y Fecha finalización
     document.getElementById('tableWrap').innerHTML=
       '<table><thead><tr>'
       +'<th>Ticket</th><th>Área</th><th>Estado</th><th>Prioridad</th><th>Ubicación</th><th>Fecha</th>'
-      +'<th>Personal asignado</th><th>Fecha finalización</th><th></th>'
+      +'<th>Personal asignado</th><th>Fecha finalización</th>'
+      +'<th></th>'
       +'</tr></thead><tbody>'+rows+'</tbody></table>';
   }catch(e){
     document.getElementById('tableWrap').innerHTML='<div class="empty">Error de conexión.</div>';
@@ -662,19 +670,26 @@ function openModal(enc){
   document.getElementById('mSave').disabled=!canEdit;
   document.getElementById('mComJefe').disabled=!canEdit;
   document.getElementById('mEstado').disabled=!canEdit;
-  // ✅ CAMBIO: JEFE también puede cambiar prioridad
+
+  // ✅ CAMBIO 1: JEFE puede cambiar prioridad (igual que ADMIN)
   document.getElementById('mPrio').disabled=!canEdit;
-  document.getElementById('mMsgCierre').disabled=!isAdmin;
+
+  // Mensaje cierre: editable para ADMIN y JEFE
+  document.getElementById('mMsgCierre').disabled=!canEdit;
   document.getElementById('mInstrPersonal').disabled=!canEdit;
-  // ✅ CAMBIO: infraBlock visible para JEFE pero NO editable (solo lectura)
-  document.getElementById('infraBlock').style.display=canEdit?'flex':'none';
+
+  // infraBlock: visible para ADMIN y JEFE, editable solo ADMIN
+  document.getElementById('infraBlock').style.display='flex';
   document.getElementById('mComInfra').disabled=!isAdmin;
-  document.getElementById('cierreBlock').style.display=isAdmin?'flex':'none';
-  document.getElementById('mSendClose').style.display=isAdmin?'inline-flex':'none';
-  // ✅ CAMBIO: botón eliminar solo visible para ADMIN
+
+  // ✅ Notificación de cierre: visible para ADMIN y JEFE
+  document.getElementById('cierreBlock').style.display=canEdit?'flex':'none';
+  document.getElementById('mSendClose').style.display=canEdit?'inline-flex':'none';
+
+  // Eliminar: solo ADMIN
   document.getElementById('mDelete').style.display=isAdmin?'inline-flex':'none';
 
-  if(isAdmin){
+  if(canEdit){
     var nu=String(t.notifCierre||'').toUpperCase();
     var ye=(nu==='ENVIADO'||nu==='ENVIADA');
     var pe=(t.estado==='Finalizado')&&!ye;
@@ -713,11 +728,11 @@ function closeModal(){
 async function save(){
   if(!CURRENT)return;
   var isAdmin=(CTX&&CTX.role==='ADMIN');
-  var canEdit=(CTX&&(CTX.role==='ADMIN'||CTX.role==='JEFE'));
   var payload={
     rowNumber:CURRENT.rowNumber,
     estado:document.getElementById('mEstado').value,
-    prioridad:canEdit?(document.getElementById('mPrio').value||''):'',
+    // ✅ CAMBIO 1: JEFE puede enviar prioridad (ya no se bloquea con isAdmin)
+    prioridad:document.getElementById('mPrio').value||'',
     comJefe:document.getElementById('mComJefe').value||'',
     comInfra:isAdmin?(document.getElementById('mComInfra').value||''):'',
     msgCierre:isAdmin?(document.getElementById('mMsgCierre').value||''):'',
@@ -755,7 +770,8 @@ async function sendClose(){
   var sp={
     rowNumber:CURRENT.rowNumber,
     estado:document.getElementById('mEstado').value,
-    prioridad:isAdmin?(document.getElementById('mPrio').value||''):'',
+    // ✅ CAMBIO 1: JEFE puede enviar prioridad (ya no se bloquea con isAdmin)
+    prioridad:document.getElementById('mPrio').value||'',
     comJefe:document.getElementById('mComJefe').value||'',
     comInfra:document.getElementById('mComInfra').value||'',
     msgCierre:document.getElementById('mMsgCierre').value||'',
