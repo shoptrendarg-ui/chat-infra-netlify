@@ -165,7 +165,6 @@ body {
 
 .hero-desc { font-size: .95rem; color: var(--ink2); line-height: 1.7; max-width: 360px; }
 
-/* Botones del hero — ahora son 2 */
 .hero-actions { display: flex; flex-direction: column; gap: 10px; }
 
 .hero-btn {
@@ -182,7 +181,6 @@ body {
 .hero-btn:hover { background: #2a2926; transform: translateY(-2px); box-shadow: 0 8px 28px rgba(17,17,16,.28); }
 .hero-btn:active { transform: translateY(0); }
 
-/* Botón secundario "Ver estado" */
 .hero-btn-sec {
   display: inline-flex; align-items: center; gap: 10px;
   background: var(--paper2);
@@ -209,7 +207,6 @@ body {
 .trust-row { display: flex; align-items: center; gap: 8px; font-size: .8rem; color: var(--ink3); }
 .trust-row svg { flex-shrink: 0; color: var(--ok); }
 
-/* Lado derecho */
 .hero-right { display: flex; flex-direction: column; gap: 12px; }
 .hero-card {
   background: var(--paper);
@@ -242,7 +239,6 @@ body {
   flex-direction: column;
 }
 
-/* Header institucional */
 .cq-header {
   width: 100%;
   padding: 14px 28px;
@@ -270,7 +266,6 @@ body {
 }
 .cq-back:hover { background: rgba(255,255,255,.14); color: #fff; }
 
-/* Contenido principal */
 .cq-body {
   width: 100%; max-width: 580px;
   margin: 0 auto;
@@ -296,7 +291,6 @@ body {
 
 .cq-desc { font-size: .9rem; color: var(--ink3); line-height: 1.65; }
 
-/* Formulario de consulta */
 .cq-form {
   background: #fff;
   border: 1px solid var(--border);
@@ -343,14 +337,12 @@ body {
 
 .cq-hint { font-size: .78rem; color: var(--ink3); line-height: 1.5; }
 
-/* Separador "o" */
 .cq-divider {
   display: flex; align-items: center; gap: 12px;
   font-size: .78rem; color: var(--ink3); font-family: var(--ff-mono);
 }
 .cq-divider::before,.cq-divider::after { content:''; flex:1; height:1px; background:var(--border); }
 
-/* ── RESULTADO DE CONSULTA ── */
 #cqResult { display: none; }
 
 .cq-result-card {
@@ -362,7 +354,6 @@ body {
   animation: heroIn .4s cubic-bezier(.22,.68,0,1.1) both;
 }
 
-/* Franja de color según estado */
 .cq-result-strip {
   height: 5px;
   background: var(--border2);
@@ -373,7 +364,6 @@ body {
 
 .cq-result-body { padding: 24px 26px; display: flex; flex-direction: column; gap: 20px; }
 
-/* Ticket ID y estado */
 .cq-result-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
 .cq-result-id {
   font-family: var(--ff-mono); font-size: .72rem; letter-spacing: .08em; text-transform: uppercase;
@@ -383,7 +373,6 @@ body {
   font-family: var(--ff-mono); font-size: 1rem; font-weight: 500; color: var(--ink); letter-spacing: .03em;
 }
 
-/* Badge de estado grande */
 .cq-estado-badge {
   display: inline-flex; align-items: center; gap: 7px;
   padding: 6px 14px; border-radius: 999px;
@@ -400,7 +389,6 @@ body {
 .estado-curso      .estado-dot { background: #f59e0b; animation: pulse 2s infinite; }
 .estado-finalizado .estado-dot { background: #10b981; }
 
-/* Info del ticket */
 .cq-result-info { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
 .cq-info-item { display: flex; flex-direction: column; gap: 3px; }
 .cq-info-label {
@@ -408,7 +396,6 @@ body {
 }
 .cq-info-value { font-size: .88rem; color: var(--ink2); font-weight: 500; }
 
-/* Mensaje personalizado por estado */
 .cq-estado-msg {
   border-radius: var(--r);
   padding: 16px 18px;
@@ -426,7 +413,6 @@ body {
 .msg-finalizado .cq-msg-title { color: #15803d; }
 .cq-msg-body { font-size: .83rem; color: var(--ink2); line-height: 1.6; }
 
-/* Comentario institucional */
 .cq-comentario {
   background: var(--paper2); border: 1px solid var(--border);
   border-radius: var(--r); padding: 14px 16px;
@@ -434,7 +420,6 @@ body {
 .cq-comentario-label { font-family: var(--ff-mono); font-size: .62rem; letter-spacing: .08em; text-transform: uppercase; color: var(--ink3); margin-bottom: 6px; }
 .cq-comentario-text { font-size: .86rem; color: var(--ink2); line-height: 1.6; font-style: italic; }
 
-/* Error / no encontrado */
 .cq-error {
   display: flex; align-items: flex-start; gap: 12px;
   padding: 16px 18px;
@@ -445,7 +430,6 @@ body {
 .cq-error-title { font-weight: 600; font-size: .88rem; color: var(--err); margin-bottom: 3px; }
 .cq-error-body { font-size: .82rem; color: var(--ink2); line-height: 1.55; }
 
-/* Botón nueva consulta */
 .cq-nueva-btn {
   background: var(--paper2); color: var(--ink2);
   border: 1.5px solid var(--border2);
@@ -456,7 +440,6 @@ body {
 }
 .cq-nueva-btn:hover { background: var(--rust-lt); border-color: var(--rust-mid); color: var(--rust); }
 
-/* Spinner */
 .cq-loading {
   display: flex; align-items: center; justify-content: center; gap: 10px;
   padding: 24px; color: var(--ink3); font-size: .88rem;
@@ -545,6 +528,7 @@ body {
 .btn-choice { background: var(--paper2); border: 1.5px solid var(--border); color: var(--ink2); padding: 9px 18px; border-radius: var(--r); font-family: var(--ff-sans); font-size: .85rem; font-weight: 500; cursor: pointer; transition: all var(--dur) var(--ease); touch-action: manipulation; box-shadow: var(--sh0); }
 .btn-choice:hover { background: var(--rust-lt); border-color: var(--rust-mid); color: var(--rust); transform: translateY(-1px); box-shadow: 0 3px 10px rgba(194,65,12,.14); }
 .btn-choice:active { transform: translateY(0); }
+.btn-choice:disabled { opacity: .42; cursor: not-allowed; transform: none; }
 
 .inp-row { display: flex; gap: 8px; align-items: flex-end; }
 .inp { flex: 1; background: var(--paper2); border: 1.5px solid var(--border); border-radius: var(--r); padding: 11px 14px; font-family: var(--ff-sans); font-size: .88rem; color: var(--ink); outline: none; transition: border-color var(--dur) var(--ease), box-shadow var(--dur) var(--ease), background var(--dur) var(--ease); }
@@ -570,6 +554,29 @@ input[type="date"].inp::-webkit-calendar-picker-indicator { opacity: .45; cursor
 .btn-skip:hover { border-color: var(--border2); color: var(--ink2); }
 .btn-skip:disabled { opacity: .4; cursor: not-allowed; }
 .file-name { font-family: var(--ff-mono); font-size: .72rem; color: var(--ink3); padding: 6px 10px; border: 1px solid var(--border); border-radius: 6px; background: #fff; word-break: break-all; }
+
+/* ── Turnstile wrapper ── */
+.ts-wrap {
+  background: var(--paper2);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.ts-label {
+  font-family: var(--ff-mono);
+  font-size: .65rem;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--ink3);
+}
+.ts-hint {
+  font-size: .75rem;
+  color: var(--ink3);
+  line-height: 1.4;
+}
 
 /* ══ PANTALLA ÉXITO ══ */
 #screen-success {
@@ -611,7 +618,7 @@ input[type="date"].inp::-webkit-calendar-picker-indicator { opacity: .45; cursor
   .cq-btn { width: 100%; justify-content: center; }
 }
 
-/* ── Franja institucional FICA + FCEJS — borde a borde ── */
+/* ── Franja institucional FICA + FCEJS ── */
 .inst-fac-banda {
   position: absolute;
   top: 0; left: 0; right: 0;
@@ -678,7 +685,6 @@ input[type="date"].inp::-webkit-calendar-picker-indicator { opacity: .45; cursor
   color: rgba(255,255,255,.42);
 }
 
-/* hero necesita padding-top para no quedar debajo de la franja */
 #screen-hero {
   padding-top: calc(52px + 32px) !important;
   flex-direction: column;
@@ -699,7 +705,6 @@ input[type="date"].inp::-webkit-calendar-picker-indicator { opacity: .45; cursor
   #screen-hero { padding-top: calc(88px + 20px) !important; }
 }
 
-/* ── Sello infraestructura — restaurado al tamaño original ── */
 .infra-sello {
   display: flex;
   flex-direction: column;
@@ -725,8 +730,6 @@ input[type="date"].inp::-webkit-calendar-picker-indicator { opacity: .45; cursor
   color: var(--ink2);
   line-height: 1.5;
 }
-
-.turnstile-hint { display: none; }
 </style>
 </head>
 <body>
@@ -734,7 +737,6 @@ input[type="date"].inp::-webkit-calendar-picker-indicator { opacity: .45; cursor
 <!-- ════════════ PANTALLA HERO ════════════ -->
 <div id="screen-hero">
 
-  <!-- ── Franja institucional FICA + FCEJS — borde a borde ── -->
   <div class="inst-fac-banda">
     <div class="inst-fac-placa inst-fac-fica">
       <span class="inst-fac-abbr">FICA</span>
@@ -813,7 +815,6 @@ input[type="date"].inp::-webkit-calendar-picker-indicator { opacity: .45; cursor
     <div class="hero-right">
       <div class="hero-card">
 
-        <!-- Sello real de la Subsecretaría de Infraestructura UNSL -->
         <div class="infra-sello">
           <img
             class="infra-sello-img"
@@ -896,7 +897,6 @@ input[type="date"].inp::-webkit-calendar-picker-indicator { opacity: .45; cursor
       </div>
     </div>
 
-    <!-- Resultado (oculto por defecto) -->
     <div id="cqResult"></div>
 
   </div>
@@ -991,7 +991,6 @@ function showOnly(id){
 
 function backToHero(){
   showOnly('screen-hero');
-  // limpiar estado de consulta
   document.getElementById('cqInput').value='';
   document.getElementById('cqResult').innerHTML='';
   document.getElementById('cqResult').style.display='none';
@@ -1026,7 +1025,6 @@ async function consultarTicket(){
     return;
   }
 
-  // limpio el # del inicio si lo pusieron
   const ticketId = raw.replace(/^#/,'').trim();
 
   btn.disabled = true;
@@ -1068,7 +1066,6 @@ async function consultarTicket(){
     const estado = (res.estado||'Pendiente').trim();
     const estadoKey = getEstadoKey(estado);
 
-    // Mensajes personalizados por estado
     const msgs = {
       pendiente: {
         title: 'Tu ticket está pendiente de atención',
@@ -1095,9 +1092,6 @@ async function consultarTicket(){
     const stripCls = 'strip-'+estadoKey;
 
     let comentarioHtml = '';
-    // ✅ CAMBIO: solo se muestra el comentario de Infraestructura (comInfra).
-    // El comentario del jefe de área (comJefe) NO se muestra en la consulta pública.
-    // El backend ya filtra y devuelve solo comInfra en res.comentario.
     if(res.comentario && res.comentario.trim()){
       comentarioHtml = `
         <div class="cq-comentario">
@@ -1190,16 +1184,16 @@ const state = {
 };
 
 const FLOW = [
-  {k:"area",          type:"buttons",  text:"¡Hola! Bienvenido al sistema de reportes internos de infraestructura.\n\n¿A qué área corresponde el incidente?", options:["Limpieza","Vigilancia","Mantenimiento","Informática","Campo"]},
-  {k:"prioridad",     type:"buttons",  text:"¿Cuál es la prioridad percibida del incidente?", options:["Baja","Media","Alta","Critica"]},
-  {k:"ubicacion",     type:"input",    text:"¿Dónde ocurrió el incidente?\nEjemplo: Aula 16 – Campus Universitario", placeholder:"Ubicación (sector, referencia o aula)"},
-  {k:"fecha_incidente",type:"date",    text:"Fecha del incidente"},
-  {k:"detalle",       type:"textarea", text:"Describe en detalle el incidente ocurrido. ¿Qué sucede?", placeholder:"Descripción (qué ocurre, desde cuándo y cualquier dato útil para su verificación)"},
-  {k:"nombre",        type:"input",    text:"Tu nombre y apellido", placeholder:"Nombre y apellido"},
-  {k:"email",         type:"input",    text:"Finalmente, proporciónanos tu correo electrónico para notificarte el seguimiento y estado de tu ticket.", placeholder:"correo@ejemplo.com"},
-  {k:"quiereImagen",  type:"buttons",  text:"📎 ¿Desea adjuntar imágenes? (Opcional)", options:["Sí","No"]},
-  {k:"imagen",        type:"file",     text:"Adjunte la imagen (JPG/PNG).", optional:true},
-  {k:"confirm",       type:"confirm",  text:"Verificación final: revise la información y confirme el registro."}
+  {k:"area",           type:"buttons",  text:"¡Hola! Bienvenido al sistema de reportes internos de infraestructura.\n\n¿A qué área corresponde el incidente?", options:["Limpieza","Vigilancia","Mantenimiento","Informática","Campo"]},
+  {k:"prioridad",      type:"buttons",  text:"¿Cuál es la prioridad percibida del incidente?", options:["Baja","Media","Alta","Critica"]},
+  {k:"ubicacion",      type:"input",    text:"¿Dónde ocurrió el incidente?\nEjemplo: Aula 16 – Campus Universitario", placeholder:"Ubicación (sector, referencia o aula)"},
+  {k:"fecha_incidente",type:"date",     text:"Fecha del incidente"},
+  {k:"detalle",        type:"textarea", text:"Describe en detalle el incidente ocurrido. ¿Qué sucede?", placeholder:"Descripción (qué ocurre, desde cuándo y cualquier dato útil para su verificación)"},
+  {k:"nombre",         type:"input",    text:"Tu nombre y apellido", placeholder:"Nombre y apellido"},
+  {k:"email",          type:"input",    text:"Finalmente, proporciónanos tu correo electrónico para notificarte el seguimiento y estado de tu ticket.", placeholder:"correo@ejemplo.com"},
+  {k:"quiereImagen",   type:"buttons",  text:"📎 ¿Desea adjuntar imágenes? (Opcional)", options:["Sí","No"]},
+  {k:"imagen",         type:"file",     text:"Adjunte la imagen (JPG/PNG).", optional:true},
+  {k:"confirm",        type:"confirm",  text:"Verificación final: revise la información y confirme el registro."}
 ];
 
 const STEP_LABELS = ["Área","Prioridad","Ubicación","Fecha","Descripción","Nombre","Correo","Imagen","Adjunto","Confirmación"];
@@ -1410,6 +1404,8 @@ function renderStep(step){
     renderFile(()=>{ stepIndex++; askCurrentStep(); });
     return;
   }
+
+  /* ════ CONFIRM — con Turnstile managed (widget visible con tilde) ════ */
   if(step.type==='confirm'){
     const resumen=
       "Resumen del reporte\n"+"─────────────────────\n"+
@@ -1417,86 +1413,149 @@ function renderStep(step){
       "Ubicación: "+state.ubicacion+"\n"+"Descripción: "+state.detalle+"\n"+
       "Fecha: "+state.fecha_incidente+"\n"+"Solicitante: "+state.nombre+"\n"+
       "Correo: "+state.email+"\n"+"Imagen: "+(state.imagenUrl?'Adjunta':'No adjunta')+"\n\n"+
-      "¿Confirma el registro de esta incidencia?";
+      "Completá la verificación de seguridad y luego confirmá el registro.";
     addMsg('bot',resumen);
 
-    // Renderizar botones + widget Turnstile
     const box=boxEl();
     box.innerHTML='';
 
-    // Widget Turnstile INVISIBLE — el usuario no ve nada, se resuelve en background
-    let _tsWidgetId = null;
-    let _tsToken = null;
-    const tsDiv = document.createElement('div');
-    tsDiv.id = 'tsWidget';
-    tsDiv.style.display = 'none';
-    box.appendChild(tsDiv);
+    /* ── Contenedor Turnstile ── */
+    const tsWrap=document.createElement('div');
+    tsWrap.className='ts-wrap';
+    const tsLabel=document.createElement('div');
+    tsLabel.className='ts-label';
+    tsLabel.textContent='Verificación de seguridad';
+    const tsDiv=document.createElement('div');
+    tsDiv.id='tsWidget';
+    const tsHint=document.createElement('div');
+    tsHint.className='ts-hint';
+    tsHint.textContent='Completá la verificación para habilitar el botón Confirmar.';
+    tsWrap.appendChild(tsLabel);
+    tsWrap.appendChild(tsDiv);
+    tsWrap.appendChild(tsHint);
+    box.appendChild(tsWrap);
 
-    // Renderizar Turnstile invisible con callback
-    if(window.turnstile){
-      _tsWidgetId = window.turnstile.render('#tsWidget', {
-        sitekey: '0x4AAAAAACpsf8JExsabS12b',
-        size: 'invisible',
-        callback: function(token){ _tsToken = token; },
-        'error-callback': function(){ _tsToken = 'bypass'; },
-        'expired-callback': function(){ _tsToken = null; if(_tsWidgetId!==null) window.turnstile.reset(_tsWidgetId); }
-      });
-    }
-
-    // Botones de confirmar/cancelar
+    /* ── Botones ── */
     const choiceWrap=document.createElement('div');
     choiceWrap.className='choices';
-    choiceWrap.style.marginTop='8px';
+    choiceWrap.style.marginTop='10px';
 
-    ['Confirmar','Cancelar'].forEach(opt=>{
-      const b=document.createElement('button');
-      b.className='btn-choice';b.textContent=opt;
-      b.addEventListener('click',async()=>{
-        addMsg('me',opt);
-        if(opt==='Cancelar'){
-          addMsg('bot','Operación cancelada. Para iniciar un nuevo registro, actualice la página.');
-          box.innerHTML='<div class="hint">Registro cancelado.</div>';
-          pillEl().textContent='Cancelado';
+    const btnConfirmar=document.createElement('button');
+    btnConfirmar.className='btn-choice';
+    btnConfirmar.textContent='Confirmar';
+    btnConfirmar.disabled=true; // deshabilitado hasta que Turnstile apruebe
+
+    const btnCancelar=document.createElement('button');
+    btnCancelar.className='btn-choice';
+    btnCancelar.textContent='Cancelar';
+
+    choiceWrap.appendChild(btnConfirmar);
+    choiceWrap.appendChild(btnCancelar);
+    box.appendChild(choiceWrap);
+
+    /* ── Token Turnstile ── */
+    let _tsToken=null;
+    let _confirmed=false;
+
+    const SITEKEY='0x4AAAAAACpsf8JExsabS12b';
+
+    function renderTurnstile(){
+      if(window.turnstile){
+        window.turnstile.render('#tsWidget',{
+          sitekey: SITEKEY,
+          theme: 'light',
+          callback: function(token){
+            _tsToken=token;
+            btnConfirmar.disabled=false;
+            tsHint.textContent='Verificación completada. Ya podés confirmar el registro.';
+            tsHint.style.color='var(--ok)';
+          },
+          'error-callback': function(){
+            _tsToken=null;
+            btnConfirmar.disabled=true;
+            tsHint.textContent='Error en la verificación. Por favor recargá la página.';
+            tsHint.style.color='var(--err)';
+          },
+          'expired-callback': function(){
+            _tsToken=null;
+            btnConfirmar.disabled=true;
+            tsHint.textContent='La verificación expiró. Por favor recargá la página.';
+            tsHint.style.color='var(--err)';
+          }
+        });
+      } else {
+        /* Turnstile no cargó (bloqueador de ads, red lenta, etc.) — permitir igual */
+        _tsToken='turnstile-not-loaded';
+        btnConfirmar.disabled=false;
+        tsHint.textContent='Verificación omitida (no se pudo cargar el widget).';
+      }
+    }
+
+    /* Turnstile puede cargar después del render del DOM */
+    if(window.turnstile){
+      renderTurnstile();
+    } else {
+      /* Esperar hasta 4 seg a que cargue el script async */
+      let waited=0;
+      const waitTs=setInterval(()=>{
+        waited+=200;
+        if(window.turnstile){ clearInterval(waitTs); renderTurnstile(); return; }
+        if(waited>=4000){
+          clearInterval(waitTs);
+          _tsToken='turnstile-timeout';
+          btnConfirmar.disabled=false;
+          tsHint.textContent='Verificación omitida (no se pudo cargar el widget).';
+        }
+      },200);
+    }
+
+    /* ── Acción Cancelar ── */
+    btnCancelar.addEventListener('click',function(){
+      if(_confirmed) return;
+      addMsg('me','Cancelar');
+      addMsg('bot','Operación cancelada. Para iniciar un nuevo registro, actualizá la página.');
+      box.innerHTML='<div class="hint">Registro cancelado.</div>';
+      pillEl().textContent='Cancelado';
+    });
+
+    /* ── Acción Confirmar ── */
+    btnConfirmar.addEventListener('click',async function(){
+      if(_confirmed) return;
+      if(!_tsToken){
+        tsHint.textContent='Por favor completá la verificación de seguridad antes de confirmar.';
+        tsHint.style.color='var(--err)';
+        return;
+      }
+      _confirmed=true;
+      btnConfirmar.disabled=true;
+      btnCancelar.disabled=true;
+      addMsg('me','Confirmar');
+
+      pillEl().textContent='Registrando…';
+      progressEl().style.width='95%';
+      box.innerHTML='<div class="hint" style="text-align:center;padding:6px 0;">Procesando la solicitud…</div>';
+
+      try{
+        const res=await callApi("createTicket",{
+          area:state.area, prioridad:state.prioridad, ubicacion:state.ubicacion,
+          detalle:state.detalle, fecha_incidente:state.fecha_incidente,
+          nombre:state.nombre, email:state.email, imagenUrl:state.imagenUrl,
+          cfTurnstileToken: _tsToken
+        });
+        if(!res||!res.ok){
+          addMsg('bot','No fue posible registrar la incidencia: '+(res?.error||'Error'));
+          pillEl().textContent='Error';
+          box.innerHTML='<div class="hint">Si lo desea, vuelva a intentar actualizando la página.</div>';
           return;
         }
-        // Si Turnstile no resolvió aún, ejecutarlo y esperar el token
-        if(!_tsToken && window.turnstile && _tsWidgetId!==null){
-          window.turnstile.execute(_tsWidgetId);
-          pillEl().textContent='Verificando…';
-          // Esperar hasta 8 segundos a que resuelva
-          let waited = 0;
-          while(!_tsToken && waited < 8000){
-            await new Promise(r=>setTimeout(r,200));
-            waited += 200;
-          }
-        }
-        const tokenToSend = _tsToken || 'no-token';
-        pillEl().textContent='Registrando…';
-        progressEl().style.width='95%';
-        box.innerHTML='<div class="hint" style="text-align:center;padding:6px 0;">Procesando la solicitud…</div>';
-        try{
-          const res=await callApi("createTicket",{
-            area:state.area, prioridad:state.prioridad, ubicacion:state.ubicacion,
-            detalle:state.detalle, fecha_incidente:state.fecha_incidente,
-            nombre:state.nombre, email:state.email, imagenUrl:state.imagenUrl,
-            cfTurnstileToken: tokenToSend
-          });
-          if(!res||!res.ok){
-            addMsg('bot','No fue posible registrar la incidencia: '+(res?.error||'Error'));
-            pillEl().textContent='Error';
-            box.innerHTML='<div class="hint">Si lo desea, vuelva a intentar actualizando la página.</div>';
-            return;
-          }
-          showSuccess(res.ticketId, res.estado||'Pendiente');
-        }catch(e){
-          addMsg('bot','Se produjo un error al registrar la incidencia.');
-          pillEl().textContent='Error';
-          box.innerHTML='<div class="hint">Para reintentar, actualice la página.</div>';
-        }
-      });
-      choiceWrap.appendChild(b);
+        showSuccess(res.ticketId, res.estado||'Pendiente');
+      }catch(e){
+        addMsg('bot','Se produjo un error al registrar la incidencia.');
+        pillEl().textContent='Error';
+        box.innerHTML='<div class="hint">Para reintentar, actualice la página.</div>';
+      }
     });
-    box.appendChild(choiceWrap);
+
     chatEl().scrollTop=chatEl().scrollHeight;
   }
 }
@@ -1533,7 +1592,6 @@ function startChat(){
   askCurrentStep();
 }
 
-/* Init */
 showOnly('screen-hero');
 </script>
 </body>
