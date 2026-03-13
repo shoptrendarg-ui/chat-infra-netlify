@@ -1417,87 +1417,106 @@ function renderStep(step){
       "Ubicación: "+state.ubicacion+"\n"+"Descripción: "+state.detalle+"\n"+
       "Fecha: "+state.fecha_incidente+"\n"+"Solicitante: "+state.nombre+"\n"+
       "Correo: "+state.email+"\n"+"Imagen: "+(state.imagenUrl?'Adjunta':'No adjunta')+"\n\n"+
-      "¿Confirma el registro de esta incidencia?";
+      "Verificá los datos y completá la verificación de seguridad para confirmar.";
     addMsg('bot',resumen);
 
-    // Renderizar botones + widget Turnstile
     const box=boxEl();
     box.innerHTML='';
 
-    // Widget Turnstile INVISIBLE — el usuario no ve nada, se resuelve en background
-    let _tsWidgetId = null;
+    const wrapper = document.createElement('div');
+    wrapper.style.cssText = 'display:flex;flex-direction:column;gap:12px;';
+
+    // Widget Turnstile MANAGED (checkbox visible)
     let _tsToken = null;
+    let _tsWidgetId = null;
+    const tsContainer = document.createElement('div');
+    tsContainer.style.cssText = 'display:flex;justify-content:flex-start;padding:4px 0;';
     const tsDiv = document.createElement('div');
     tsDiv.id = 'tsWidget';
-    tsDiv.style.display = 'none';
-    box.appendChild(tsDiv);
+    tsContainer.appendChild(tsDiv);
+    wrapper.appendChild(tsContainer);
 
-    // Renderizar Turnstile invisible con callback
     if(window.turnstile){
       _tsWidgetId = window.turnstile.render('#tsWidget', {
         sitekey: '0x4AAAAAACpsf8JExsabS12b',
-        size: 'invisible',
-        callback: function(token){ _tsToken = token; },
-        'error-callback': function(){ _tsToken = 'bypass'; },
-        'expired-callback': function(){ _tsToken = null; if(_tsWidgetId!==null) window.turnstile.reset(_tsWidgetId); }
+        theme: 'light',
+        callback: function(token){
+          _tsToken = token;
+          btnConfirmar.disabled = false;
+          btnConfirmar.style.opacity = '1';
+          btnConfirmar.style.cursor = 'pointer';
+        },
+        'expired-callback': function(){
+          _tsToken = null;
+          btnConfirmar.disabled = true;
+          btnConfirmar.style.opacity = '0.45';
+          btnConfirmar.style.cursor = 'not-allowed';
+          if(_tsWidgetId !== null) window.turnstile.reset(_tsWidgetId);
+        },
+        'error-callback': function(){
+          _tsToken = null;
+          btnConfirmar.disabled = true;
+          btnConfirmar.style.opacity = '0.45';
+          btnConfirmar.style.cursor = 'not-allowed';
+        }
       });
     }
 
-    // Botones de confirmar/cancelar
-    const choiceWrap=document.createElement('div');
-    choiceWrap.className='choices';
-    choiceWrap.style.marginTop='8px';
+    const choiceWrap = document.createElement('div');
+    choiceWrap.className = 'choices';
 
-    ['Confirmar','Cancelar'].forEach(opt=>{
-      const b=document.createElement('button');
-      b.className='btn-choice';b.textContent=opt;
-      b.addEventListener('click',async()=>{
-        addMsg('me',opt);
-        if(opt==='Cancelar'){
-          addMsg('bot','Operación cancelada. Para iniciar un nuevo registro, actualice la página.');
-          box.innerHTML='<div class="hint">Registro cancelado.</div>';
-          pillEl().textContent='Cancelado';
+    const btnConfirmar = document.createElement('button');
+    btnConfirmar.className = 'btn-choice';
+    btnConfirmar.textContent = 'Confirmar';
+    btnConfirmar.disabled = true;
+    btnConfirmar.style.opacity = '0.45';
+    btnConfirmar.style.cursor = 'not-allowed';
+
+    const btnCancelar = document.createElement('button');
+    btnCancelar.className = 'btn-choice';
+    btnCancelar.textContent = 'Cancelar';
+
+    btnCancelar.addEventListener('click', () => {
+      addMsg('me', 'Cancelar');
+      addMsg('bot', 'Operación cancelada. Para iniciar un nuevo registro, actualizá la página.');
+      box.innerHTML = '<div class="hint">Registro cancelado.</div>';
+      pillEl().textContent = 'Cancelado';
+    });
+
+    btnConfirmar.addEventListener('click', async () => {
+      if(!_tsToken) return;
+      addMsg('me', 'Confirmar');
+      pillEl().textContent = 'Registrando…';
+      progressEl().style.width = '95%';
+      btnConfirmar.disabled = true;
+      btnCancelar.disabled = true;
+      box.innerHTML = '<div class="hint" style="text-align:center;padding:6px 0;">Procesando la solicitud…</div>';
+      try{
+        const res = await callApi("createTicket", {
+          area: state.area, prioridad: state.prioridad, ubicacion: state.ubicacion,
+          detalle: state.detalle, fecha_incidente: state.fecha_incidente,
+          nombre: state.nombre, email: state.email, imagenUrl: state.imagenUrl,
+          cfTurnstileToken: _tsToken
+        });
+        if(!res || !res.ok){
+          addMsg('bot', 'No fue posible registrar la incidencia: ' + (res?.error || 'Error'));
+          pillEl().textContent = 'Error';
+          box.innerHTML = '<div class="hint">Si lo desea, vuelva a intentar actualizando la página.</div>';
           return;
         }
-        // Si Turnstile no resolvió aún, ejecutarlo y esperar el token
-        if(!_tsToken && window.turnstile && _tsWidgetId!==null){
-          window.turnstile.execute(_tsWidgetId);
-          pillEl().textContent='Verificando…';
-          // Esperar hasta 8 segundos a que resuelva
-          let waited = 0;
-          while(!_tsToken && waited < 8000){
-            await new Promise(r=>setTimeout(r,200));
-            waited += 200;
-          }
-        }
-        const tokenToSend = _tsToken || 'no-token';
-        pillEl().textContent='Registrando…';
-        progressEl().style.width='95%';
-        box.innerHTML='<div class="hint" style="text-align:center;padding:6px 0;">Procesando la solicitud…</div>';
-        try{
-          const res=await callApi("createTicket",{
-            area:state.area, prioridad:state.prioridad, ubicacion:state.ubicacion,
-            detalle:state.detalle, fecha_incidente:state.fecha_incidente,
-            nombre:state.nombre, email:state.email, imagenUrl:state.imagenUrl,
-            cfTurnstileToken: tokenToSend
-          });
-          if(!res||!res.ok){
-            addMsg('bot','No fue posible registrar la incidencia: '+(res?.error||'Error'));
-            pillEl().textContent='Error';
-            box.innerHTML='<div class="hint">Si lo desea, vuelva a intentar actualizando la página.</div>';
-            return;
-          }
-          showSuccess(res.ticketId, res.estado||'Pendiente');
-        }catch(e){
-          addMsg('bot','Se produjo un error al registrar la incidencia.');
-          pillEl().textContent='Error';
-          box.innerHTML='<div class="hint">Para reintentar, actualice la página.</div>';
-        }
-      });
-      choiceWrap.appendChild(b);
+        showSuccess(res.ticketId, res.estado || 'Pendiente');
+      } catch(e){
+        addMsg('bot', 'Se produjo un error al registrar la incidencia.');
+        pillEl().textContent = 'Error';
+        box.innerHTML = '<div class="hint">Para reintentar, actualice la página.</div>';
+      }
     });
-    box.appendChild(choiceWrap);
-    chatEl().scrollTop=chatEl().scrollHeight;
+
+    choiceWrap.appendChild(btnConfirmar);
+    choiceWrap.appendChild(btnCancelar);
+    wrapper.appendChild(choiceWrap);
+    box.appendChild(wrapper);
+    chatEl().scrollTop = chatEl().scrollHeight;
   }
 }
 
@@ -1538,3 +1557,4 @@ showOnly('screen-hero');
 </script>
 </body>
 </html>
+
