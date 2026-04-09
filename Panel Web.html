@@ -653,15 +653,8 @@ function openModal(enc){
   document.getElementById('mMsgCierre').value=t.msgCierre||'';
   document.getElementById('mInstrPersonal').value=t.instrPersonal||'';
 
- var iw=document.getElementById('mImgWrap');
-if(t.imagen){
-  var urls=t.imagen.split(',').map(function(u){return u.trim();}).filter(Boolean);
-  iw.innerHTML=urls.map(function(u,i){
-    return '<a href="'+u+'" target="_blank" style="display:block;margin-bottom:3px;">Ver imagen '+(i+1)+'</a>';
-  }).join('');
-}else{
-  iw.textContent='Sin imagen adjunta';
-}
+var iw=document.getElementById('mImgWrap');
+iw.innerHTML=t.imagen?'<a href="'+t.imagen+'" target="_blank">Ver evidencia</a>':'Sin imagen adjunta';
 
   var ss=document.getElementById('mEstado');ss.innerHTML='';
   STATUS_OPTIONS.forEach(function(s){var o=document.createElement('option');o.value=s;o.textContent=s;ss.appendChild(o);});
