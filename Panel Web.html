@@ -371,6 +371,9 @@ tbody tr:hover .tcell-arr{color:var(--blue)}
             <div class="fld"><label>Contacto</label><input id="mContacto" disabled/></div>
           </div>
           <div class="g2">
+            <div class="fld"><label>Carácter del solicitante</label><input id="mCaracter" disabled/></div>
+          </div>
+          <div class="g2">
             <div class="fld"><label>Ubicación</label><input id="mUbic" disabled/></div>
             <div class="fld"><label>Evidencia</label><div id="mImgWrap" class="imgbox">—</div></div>
           </div>
@@ -644,6 +647,7 @@ function openModal(enc){
   document.getElementById('mFecha').value=t.fecha||'';
   document.getElementById('mNombre').value=t.nombre||'';
   document.getElementById('mContacto').value=t.contacto||'';
+  document.getElementById('mCaracter').value=t.caracter||'—';
   document.getElementById('mUbic').value=t.ubicacion||'';
   document.getElementById('mDetalle').value=t.detalle||'';
   document.getElementById('mComJefe').value=t.comJefe||'';
