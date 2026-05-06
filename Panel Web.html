@@ -361,7 +361,7 @@ tbody tr:hover .tcell-arr{color:var(--blue)}
         <div class="msec-body">
           <div class="g3">
             <div class="fld"><label>Estado</label><select id="mEstado"></select></div>
-            <div class="fld"><label>Área</label><input id="mArea" disabled/></div>
+            <div class="fld"><label>Área</label><select id="mArea" disabled></select></div>
             <!-- ✅ CAMBIO 1: el selector de prioridad es editable para ADMIN y JEFE -->
             <div class="fld"><label>Prioridad</label><select id="mPrio"></select></div>
           </div>
@@ -451,6 +451,7 @@ var PROXY_URL="/.netlify/functions/proxy";
 var TOKEN=null,CTX=null,CURRENT=null,CURRENT_PEOPLE=[];
 var STATUS_OPTIONS=["Pendiente","En curso","Finalizado"];
 var PRIORITY_OPTIONS=["Critica","Alta","Media","Baja"];
+var AREAS_OPTIONS=["Limpieza","Mantenimiento","Vigilancia","Informática","Campo"];
 
 /* API */
 async function api(action,payload,withToken){
@@ -643,7 +644,7 @@ function openModal(enc){
 
   /* rellenar sincrónicamente */
   document.getElementById('mTitle').textContent='#'+(t.ticketId||'');
-  document.getElementById('mArea').value=t.area||'';
+  var as=document.getElementById('mArea');as.innerHTML='';AREAS_OPTIONS.forEach(function(a){var o=document.createElement('option');o.value=a;o.textContent=a;as.appendChild(o);});as.value=t.area||AREAS_OPTIONS[0];as.disabled=!(CTX&&CTX.role==='ADMIN');
   document.getElementById('mFecha').value=t.fecha||'';
   document.getElementById('mNombre').value=t.nombre||'';
   document.getElementById('mContacto').value=t.contacto||'';
@@ -734,6 +735,7 @@ async function save(){
   var isAdmin=(CTX&&CTX.role==='ADMIN');
   var payload={
     rowNumber:CURRENT.rowNumber,
+    newArea:isAdmin?document.getElementById('mArea').value:'',
     estado:document.getElementById('mEstado').value,
     // ✅ CAMBIO 1: JEFE puede enviar prioridad (ya no se bloquea con isAdmin)
     prioridad:document.getElementById('mPrio').value||'',
