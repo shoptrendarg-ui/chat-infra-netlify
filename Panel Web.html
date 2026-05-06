@@ -366,7 +366,7 @@ tbody tr:hover .tcell-arr{color:var(--blue)}
             <div class="fld"><label>Prioridad</label><select id="mPrio"></select></div>
           </div>
           <div class="g3">
-            <div class="fld"><label>Fecha</label><input id="mFecha" disabled/></div>
+            <div class="fld"><label>Fecha</label><input type="date" id="mFecha" disabled/></div>
             <div class="fld"><label>Solicitante</label><input id="mNombre" disabled/></div>
             <div class="fld"><label>Contacto</label><input id="mContacto" disabled/></div>
           </div>
@@ -645,7 +645,15 @@ function openModal(enc){
   /* rellenar sincrónicamente */
   document.getElementById('mTitle').textContent='#'+(t.ticketId||'');
   var as=document.getElementById('mArea');as.innerHTML='';AREAS_OPTIONS.forEach(function(a){var o=document.createElement('option');o.value=a;o.textContent=a;as.appendChild(o);});as.value=t.area||AREAS_OPTIONS[0];as.disabled=!(CTX&&CTX.role==='ADMIN');
-  document.getElementById('mFecha').value=t.fecha||'';
+  (function(){
+    var raw=t.fecha||'';
+    var iso='';
+    var m=raw.match(/^(\d{2})\/(\d{2})\/(\d{4})$/);
+    if(m) iso=m[3]+'-'+m[2]+'-'+m[1];
+    var el=document.getElementById('mFecha');
+    el.value=iso||raw;
+    el.disabled=!(CTX&&CTX.role==='ADMIN');
+  })();
   document.getElementById('mNombre').value=t.nombre||'';
   document.getElementById('mContacto').value=t.contacto||'';
   document.getElementById('mCaracter').value=t.caracter||'—';
@@ -736,6 +744,7 @@ async function save(){
   var payload={
     rowNumber:CURRENT.rowNumber,
     newArea:isAdmin?document.getElementById('mArea').value:'',
+    newFecha:isAdmin?document.getElementById('mFecha').value:'',
     estado:document.getElementById('mEstado').value,
     // ✅ CAMBIO 1: JEFE puede enviar prioridad (ya no se bloquea con isAdmin)
     prioridad:document.getElementById('mPrio').value||'',
